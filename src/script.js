@@ -64,7 +64,7 @@ const particlesMaterial = new THREE.PointsMaterial({
 
 //sphere barrier
 const sphere = new THREE.Mesh(
-  new THREE.SphereGeometry(20),
+  new THREE.SphereGeometry(10),
   new THREE.MeshBasicMaterial({ wireframe: true, color: "black" })
 );
 scene.add(sphere);
@@ -79,6 +79,22 @@ scene.add(enemyShip, teamShip);
 
 teamShip.position.set(2, 0, 4);
 enemyShip.position.set(-2, 0, -4);
+
+//smaller transporters
+
+const tansShipGeometry = new THREE.BoxGeometry(0.8, 0.25, 1.2);
+const enemyTransShip1 = new THREE.Mesh(tansShipGeometry, enemyMaterial);
+const teamTransShip1 = new THREE.Mesh(tansShipGeometry, teamMaterial);
+const enemyTransShip2 = new THREE.Mesh(tansShipGeometry, enemyMaterial);
+const teamTransShip2 = new THREE.Mesh(tansShipGeometry, teamMaterial);
+scene.add(teamTransShip1, enemyTransShip1, teamTransShip2, enemyTransShip2);
+enemyTransShip1.position.set(0.5, -0.5, -4);
+enemyTransShip2.position.set(-3, 1, -3);
+teamTransShip1.position.set(0, -0, 2);
+teamTransShip2.position.set(4, 1.5, 0);
+
+//fighters
+
 /**
  * Points
  */
@@ -129,9 +145,9 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.z = 6;
+camera.position.z = -77;
 camera.position.y = -2;
-camera.position.x = 4;
+camera.position.x = 10;
 cameraGroup.add(camera);
 
 // Controls
