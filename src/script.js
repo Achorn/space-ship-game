@@ -120,11 +120,15 @@ const camera = new THREE.PerspectiveCamera(
   100
 );
 camera.position.z = 6;
+camera.position.y = -2;
+camera.position.x = 4;
 cameraGroup.add(camera);
 
 // Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.5;
 /**
  * Renderer
  */
