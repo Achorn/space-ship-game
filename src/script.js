@@ -41,33 +41,6 @@ const toonMaterial = new THREE.MeshToonMaterial({
   //   gradientMap: gradientTexture,
 });
 
-const objectsDistance = 4;
-// const mesh1 = new THREE.Mesh(
-//   new THREE.TorusGeometry(1, 0.4, 16, 60),
-//   toonMaterial
-// );
-
-// const mesh2 = new THREE.Mesh(new THREE.ConeGeometry(1, 2, 32), toonMaterial);
-
-// const mesh3 = new THREE.Mesh(
-// new THREE.TorusKnotGeometry(0.8, 0.35, 100, 16),
-// toonMaterial
-// );
-
-// mesh1.position.y = -objectsDistance * 0;
-// mesh2.position.y = -objectsDistance * 1;
-// mesh3.position.y = -objectsDistance * 2;
-
-// mesh1.position.x = 1;
-// mesh2.position.x = -1;
-// mesh3.position.x = 1;
-// scene.add(mesh1, mesh2, mesh3);
-
-// const sectionMeshes = [mesh1, mesh2, mesh3];
-
-// Particles
-// geometry
-
 const particlesCount = 1200;
 const positions = new Float32Array(particlesCount * 3);
 
@@ -86,8 +59,16 @@ ParticlesGeometry.setAttribute(
 const particlesMaterial = new THREE.PointsMaterial({
   color: parameters.materialColor,
   sizeAttenuation: true,
-  size: 0.03,
+  size: 0.05,
 });
+
+//sphere barrier
+
+const sphere = new THREE.Mesh(
+  new THREE.SphereGeometry(20),
+  new THREE.MeshBasicMaterial({ wireframe: true, color: "black" })
+);
+scene.add(sphere);
 
 /**
  * Points
