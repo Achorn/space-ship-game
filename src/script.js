@@ -63,13 +63,22 @@ const particlesMaterial = new THREE.PointsMaterial({
 });
 
 //sphere barrier
-
 const sphere = new THREE.Mesh(
   new THREE.SphereGeometry(20),
   new THREE.MeshBasicMaterial({ wireframe: true, color: "black" })
 );
 scene.add(sphere);
 
+//ships
+const kingShip = new THREE.BoxGeometry(1.4, 0.6, 4);
+const enemyMaterial = new THREE.MeshStandardMaterial({ color: "red" });
+const teamMaterial = new THREE.MeshStandardMaterial({ color: "blue" });
+const enemyShip = new THREE.Mesh(kingShip, enemyMaterial);
+const teamShip = new THREE.Mesh(kingShip, teamMaterial);
+scene.add(enemyShip, teamShip);
+
+teamShip.position.set(2, 0, 4);
+enemyShip.position.set(-2, 0, -4);
 /**
  * Points
  */
@@ -79,9 +88,10 @@ scene.add(points);
 /**
  *  Lights
  */
+const ambientLight = new THREE.AmbientLight("#1b1a20", 2);
 const directionalLight = new THREE.DirectionalLight("#ffffff", 3);
 directionalLight.position.set(1, 1, 0);
-scene.add(directionalLight);
+scene.add(directionalLight, ambientLight);
 
 /**
  * Sizes
