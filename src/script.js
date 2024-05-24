@@ -1,13 +1,25 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
+/**
+ * Debug
+ */
+const gui = new GUI();
+
+const parameters = {
+  materialColor: "#b4e0ee",
+};
+
+gui.addColor(parameters, "materialColor").onChange(() => {
+  toonMaterial.color.set(parameters.materialColor);
+  particlesMaterial.color.set(parameters.materialColor);
+});
+
+gui.hide();
 /**
  * Base
  */
-// Debug
-const gui = new GUI();
-
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
 
@@ -15,53 +27,81 @@ const canvas = document.querySelector("canvas.webgl");
 const scene = new THREE.Scene();
 
 /**
- * Textures
+ * Objects
  */
+
+//texture
 const textureLoader = new THREE.TextureLoader();
-const particleTexture = textureLoader.load("/textures/particles/2.png");
-//particles
+const gradientTexture = textureLoader.load("textures/gradients/3.jpg");
+gradientTexture.magFilter = THREE.NearestFilter;
 
-//materials
-const particleGeometry = new THREE.SphereGeometry(1, 32, 32);
-const particleMaterial = new THREE.PointsMaterial({
-  size: 0.1,
-  sizeAttenuation: true,
-  transparent: true,
+// Material
+const toonMaterial = new THREE.MeshToonMaterial({
+  color: parameters.materialColor,
+  //   gradientMap: gradientTexture,
 });
-particleMaterial.alphaMap = particleTexture;
-particleMaterial.color = new THREE.Color("");
-// particleMaterial.alphaTest = 0.001;
-// particleMaterial.depthTest = false;
-particleMaterial.depthWrite = false; // the best one it seems
-particleMaterial.blending = THREE.AdditiveBlending;
-particleMaterial.vertexColors = true;
 
-//points
-const particles = new THREE.Points(particleGeometry, particleMaterial);
-scene.add(particles);
+const objectsDistance = 4;
+// const mesh1 = new THREE.Mesh(
+//   new THREE.TorusGeometry(1, 0.4, 16, 60),
+//   toonMaterial
+// );
 
-const customGeometry = new THREE.BufferGeometry();
-const count = 20000;
-const positions = new Float32Array(count * 3);
-const colors = new Float32Array(count * 3);
-for (let i = 0; i < count * 3; i++) {
-  positions[i] = (Math.random() - 0.5) * 10;
-  colors[i] = Math.random();
+// const mesh2 = new THREE.Mesh(new THREE.ConeGeometry(1, 2, 32), toonMaterial);
+
+// const mesh3 = new THREE.Mesh(
+// new THREE.TorusKnotGeometry(0.8, 0.35, 100, 16),
+// toonMaterial
+// );
+
+// mesh1.position.y = -objectsDistance * 0;
+// mesh2.position.y = -objectsDistance * 1;
+// mesh3.position.y = -objectsDistance * 2;
+
+// mesh1.position.x = 1;
+// mesh2.position.x = -1;
+// mesh3.position.x = 1;
+// scene.add(mesh1, mesh2, mesh3);
+
+// const sectionMeshes = [mesh1, mesh2, mesh3];
+
+// Particles
+// geometry
+
+const particlesCount = 1200;
+const positions = new Float32Array(particlesCount * 3);
+
+for (let i = 0; i < particlesCount; i++) {
+  let i3 = i * 3;
+  positions[i3] = (Math.random() - 0.5) * 20;
+  positions[i3 + 1] = (Math.random() - 0.5) * 20;
+  positions[i3 + 2] = (Math.random() - 0.5) * 20;
 }
-customGeometry.setAttribute(
+const ParticlesGeometry = new THREE.BufferGeometry();
+ParticlesGeometry.setAttribute(
   "position",
   new THREE.BufferAttribute(positions, 3)
 );
 
-customGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-const customParticles = new THREE.Points(customGeometry, particleMaterial);
-scene.add(customParticles);
+const particlesMaterial = new THREE.PointsMaterial({
+  color: parameters.materialColor,
+  sizeAttenuation: true,
+  size: 0.03,
+});
 
-// const cube = new THREE.Mesh(
-//   new THREE.BoxGeometry(),
-//   new THREE.MeshBasicMaterial("black")
-// );
-// scene.add(cube);
+/**
+ * Points
+ */
+let points = new THREE.Points(ParticlesGeometry, particlesMaterial);
+scene.add(points);
+
+/**
+ *  Lights
+ */
+const directionalLight = new THREE.DirectionalLight("#ffffff", 3);
+directionalLight.position.set(1, 1, 0);
+scene.add(directionalLight);
+
 /**
  * Sizes
  */
@@ -87,54 +127,51 @@ window.addEventListener("resize", () => {
 /**
  * Camera
  */
+
+const cameraGroup = new THREE.Group();
+scene.add(cameraGroup);
+
 // Base camera
 const camera = new THREE.PerspectiveCamera(
-  75,
+  35,
   sizes.width / sizes.height,
   0.1,
   100
 );
-camera.position.z = 8;
-camera.position.y = 10;
-camera.position.x = -1.5;
-scene.add(camera);
+camera.position.z = 6;
+cameraGroup.add(camera);
 
 // Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
-
 /**
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
+  alpha: true,
 });
+
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 /**
  * Animate
  */
+
 const clock = new THREE.Clock();
+let previousTime = 0;
+
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
-  //update particles
-  // customParticles.rotation.y = -elapsedTime * 0.2;
-  for (let i = 0; i < count; i++) {
-    const i3 = i * 3;
-    const x = customGeometry.attributes.position.array[i3];
-
-    const z = customGeometry.attributes.position.array[i3 + 2];
-    customGeometry.attributes.position.array[i3 + 1] = Math.sin(
-      elapsedTime + x + z
-    );
-  }
-  customGeometry.attributes.position.needsUpdate = true;
+  const deltaTime = elapsedTime - previousTime;
+  previousTime = elapsedTime;
 
   // Update controls
   controls.update();
 
   // Render
+
   renderer.render(scene, camera);
 
   // Call tick again on the next frame
