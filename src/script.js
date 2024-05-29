@@ -99,8 +99,7 @@ const heroShip = new THREE.BoxGeometry(0.4, 0.4, 0.4);
 const heroMaterial = new THREE.MeshStandardMaterial({ color: "orange" });
 const heroMesh = new THREE.Mesh(heroShip, heroMaterial);
 scene.add(heroMesh);
-teamShip.position.set(2, 0, 4);
-enemyShip.position.set(-2, 0, -4);
+heroMesh.position.set(-10, 0, 0);
 
 /**
  * Points
