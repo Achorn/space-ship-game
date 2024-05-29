@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import GUI from "lil-gui";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-
+//
 /**
  * Debug
  */
@@ -95,6 +95,12 @@ teamTransShip2.position.set(4, 1.5, 0);
 
 //fighters
 
+const heroShip = new THREE.BoxGeometry(0.4, 0.4, 0.4);
+const heroMaterial = new THREE.MeshStandardMaterial({ color: "orange" });
+const heroMesh = new THREE.Mesh(heroShip, heroMaterial);
+scene.add(heroMesh);
+heroMesh.position.set(-10, 0, 0);
+
 /**
  * Points
  */
@@ -145,16 +151,27 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.z = -77;
-camera.position.y = -2;
-camera.position.x = 10;
-cameraGroup.add(camera);
+camera.lookAt(0, 0, 0);
+// cameraGroup.add(camera);
+heroMesh.add(camera);
+camera.rotateY(-Math.PI * 0.5);
+camera.target = heroMesh;
+camera.rotateX(-Math.PI * 0.05);
+// camera.target.position.copy(heroMesh);
 
+camera.position.x -= 3;
+camera.position.y += 0.7;
+
+// camera.lookAt(heroMesh);
+// camera.position.x -= 1;
+// camera.position.y -= 1;
+// camera.position.z -= 1;
+// camera.
 // Controls
-const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true;
-controls.autoRotate = true;
-controls.autoRotateSpeed = 0.5;
+// const controls = new OrbitControls(camera, canvas);
+// controls.enableDamping = true;
+// controls.autoRotate = true;
+// controls.autoRotateSpeed = 0.5;
 /**
  * Renderer
  */
@@ -178,8 +195,13 @@ const tick = () => {
   const deltaTime = elapsedTime - previousTime;
   previousTime = elapsedTime;
 
+  //update player
+  heroMesh.position.x += deltaTime;
+  if (heroMesh.position.x > 10) heroMesh.position.x = -10;
+  // camera.lookAt(heroMesh);
+
   // Update controls
-  controls.update();
+  // controls.update();
 
   // Render
 
