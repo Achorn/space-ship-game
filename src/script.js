@@ -1,10 +1,13 @@
 import * as THREE from "three";
 import GUI from "lil-gui";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import Game from "./Game/Game";
 //
 /**
  * Debug
  */
+
+const game = new Game(document.querySelector("canvas.webgl"));
 const gui = new GUI();
 
 const parameters = {
