@@ -110,16 +110,16 @@ if (false == true) {
   /**
    * Points
    */
-  let points = new THREE.Points(ParticlesGeometry, particlesMaterial);
-  scene.add(points);
+  // let points = new THREE.Points(ParticlesGeometry, particlesMaterial);
+  // scene.add(points);
 
   /**
    *  Lights
    */
-  const ambientLight = new THREE.AmbientLight("#1b1a20", 2);
-  const directionalLight = new THREE.DirectionalLight("#ffffff", 3);
-  directionalLight.position.set(1, 1, 0);
-  scene.add(directionalLight, ambientLight);
+  // const ambientLight = new THREE.AmbientLight("#1b1a20", 2);
+  // const directionalLight = new THREE.DirectionalLight("#ffffff", 3);
+  // directionalLight.position.set(1, 1, 0);
+  // scene.add(directionalLight, ambientLight);
 
   /**
    * Sizes

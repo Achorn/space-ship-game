@@ -30,6 +30,6 @@ export default class Camera {
     this.instance.updateProjectionMatrix();
   }
   update() {
-    // this.controls.update(); for orbit controls not being used
+    this.controls.update(); // for orbit controls not being used
   }
 }

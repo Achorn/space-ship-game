@@ -37,10 +37,10 @@ export default class Stars {
     });
   }
   setPoints() {
-    this.points = new THREE.Points(
+    this.instance = new THREE.Points(
       this.particlesGeometry,
       this.particlesMaterial
     );
-    this.scene.add(this.points);
+    this.scene.add(this.instance);
   }
 }
