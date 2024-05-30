@@ -5,9 +5,8 @@ export default class Ships {
   constructor() {
     this.game = new Game();
     this.scene = this.game.scene;
-    // this.time = this.game.time;
-    // this.debug = this.game.debug;
 
+    // TODO: remove ship code and add them into their own files
     const kingShip = new THREE.BoxGeometry(1.4, 0.6, 4);
     const enemyMaterial = new THREE.MeshStandardMaterial({ color: "red" });
     const teamMaterial = new THREE.MeshStandardMaterial({ color: "blue" });
@@ -39,6 +38,19 @@ export default class Ships {
     const heroMesh = new THREE.Mesh(heroShip, heroMaterial);
     this.scene.add(heroMesh);
     // heroMesh.position.set(-10, 0, 0);
+
+    // heroMesh.add(camera);
+    // adding camera to hero mesh instead of world
+    // camera.rotateY(-Math.PI * 0.5);
+    // camera.target = heroMesh;
+    // camera.rotateX(-Math.PI * 0.05);
+
+    // camera.position.x -= 3;
+    // camera.position.y += 0.7;
+
+    //update player
+    // heroMesh.position.x += deltaTime;
+    // if (heroMesh.position.x > 10) heroMesh.position.x = -10;
 
     this.setParticles();
     this.setGeometry();
