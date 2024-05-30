@@ -38,7 +38,7 @@ export default class Ships {
     const heroMaterial = new THREE.MeshStandardMaterial({ color: "orange" });
     const heroMesh = new THREE.Mesh(heroShip, heroMaterial);
     this.scene.add(heroMesh);
-    heroMesh.position.set(-10, 0, 0);
+    // heroMesh.position.set(-10, 0, 0);
 
     this.setParticles();
     this.setGeometry();
