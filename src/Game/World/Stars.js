@@ -14,7 +14,7 @@ export default class Stars {
   }
   setParticles() {
     this.particlesCount = 1200;
-    this.positions = new Float32Array(this.particlesCount);
+    this.positions = new Float32Array(this.particlesCount * 3);
     for (let i = 0; i < this.particlesCount; i++) {
       let i3 = i * 3;
       this.positions[i3] = (Math.random() - 0.5) * 20;

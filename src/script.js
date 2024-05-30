@@ -11,101 +11,101 @@ const game = new Game(document.querySelector("canvas.webgl"));
 
 if (false == true) {
   //hiding original code
-  const gui = new GUI();
+  // const gui = new GUI();
 
-  const parameters = {
-    materialColor: "#b4e0ee",
-  };
+  // const parameters = {
+  //   materialColor: "#b4e0ee",
+  // };
 
-  gui.addColor(parameters, "materialColor").onChange(() => {
-    toonMaterial.color.set(parameters.materialColor);
-    particlesMaterial.color.set(parameters.materialColor);
-  });
+  // gui.addColor(parameters, "materialColor").onChange(() => {
+  //   toonMaterial.color.set(parameters.materialColor);
+  //   particlesMaterial.color.set(parameters.materialColor);
+  // });
 
-  gui.hide();
+  // gui.hide();
   /**
    * Base
    */
   // Canvas
-  const canvas = document.querySelector("canvas.webgl");
+  // const canvas = document.querySelector("canvas.webgl");
 
   // Scene
-  const scene = new THREE.Scene();
+  // const scene = new THREE.Scene();
 
   /**
    * Objects
    */
 
   //texture
-  const textureLoader = new THREE.TextureLoader();
-  const gradientTexture = textureLoader.load("textures/gradients/3.jpg");
-  gradientTexture.magFilter = THREE.NearestFilter;
+  // const textureLoader = new THREE.TextureLoader();
+  // const gradientTexture = textureLoader.load("textures/gradients/3.jpg");
+  // gradientTexture.magFilter = THREE.NearestFilter;
 
   // Material
-  const toonMaterial = new THREE.MeshToonMaterial({
-    color: parameters.materialColor,
-    //   gradientMap: gradientTexture,
-  });
+  // const toonMaterial = new THREE.MeshToonMaterial({
+  // color: parameters.materialColor,
+  //   gradientMap: gradientTexture,
+  // });
 
-  const particlesCount = 1200;
-  const positions = new Float32Array(particlesCount * 3);
+  // const particlesCount = 1200;
+  // const positions = new Float32Array(particlesCount * 3);
 
-  for (let i = 0; i < particlesCount; i++) {
-    let i3 = i * 3;
-    positions[i3] = (Math.random() - 0.5) * 20;
-    positions[i3 + 1] = (Math.random() - 0.5) * 20;
-    positions[i3 + 2] = (Math.random() - 0.5) * 20;
-  }
-  const ParticlesGeometry = new THREE.BufferGeometry();
-  ParticlesGeometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(positions, 3)
-  );
+  // for (let i = 0; i < particlesCount; i++) {
+  //   let i3 = i * 3;
+  //   positions[i3] = (Math.random() - 0.5) * 20;
+  //   positions[i3 + 1] = (Math.random() - 0.5) * 20;
+  //   positions[i3 + 2] = (Math.random() - 0.5) * 20;
+  // }
+  // const ParticlesGeometry = new THREE.BufferGeometry();
+  // ParticlesGeometry.setAttribute(
+  //   "position",
+  //   new THREE.BufferAttribute(positions, 3)
+  // );
 
-  const particlesMaterial = new THREE.PointsMaterial({
-    color: parameters.materialColor,
-    sizeAttenuation: true,
-    size: 0.05,
-  });
+  // const particlesMaterial = new THREE.PointsMaterial({
+  //   color: parameters.materialColor,
+  //   sizeAttenuation: true,
+  //   size: 0.05,
+  // });
 
   //sphere barrier
-  const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(10),
-    new THREE.MeshBasicMaterial({ wireframe: true, color: "black" })
-  );
-  scene.add(sphere);
+  // const sphere = new THREE.Mesh(
+  //   new THREE.SphereGeometry(10),
+  //   new THREE.MeshBasicMaterial({ wireframe: true, color: "black" })
+  // );
+  // scene.add(sphere);
 
   //ships
-  const kingShip = new THREE.BoxGeometry(1.4, 0.6, 4);
-  const enemyMaterial = new THREE.MeshStandardMaterial({ color: "red" });
-  const teamMaterial = new THREE.MeshStandardMaterial({ color: "blue" });
-  const enemyShip = new THREE.Mesh(kingShip, enemyMaterial);
-  const teamShip = new THREE.Mesh(kingShip, teamMaterial);
-  scene.add(enemyShip, teamShip);
+  // const kingShip = new THREE.BoxGeometry(1.4, 0.6, 4);
+  // const enemyMaterial = new THREE.MeshStandardMaterial({ color: "red" });
+  // const teamMaterial = new THREE.MeshStandardMaterial({ color: "blue" });
+  // const enemyShip = new THREE.Mesh(kingShip, enemyMaterial);
+  // const teamShip = new THREE.Mesh(kingShip, teamMaterial);
+  // scene.add(enemyShip, teamShip);
 
-  teamShip.position.set(2, 0, 4);
-  enemyShip.position.set(-2, 0, -4);
+  // teamShip.position.set(2, 0, 4);
+  // enemyShip.position.set(-2, 0, -4);
 
   //smaller transporters
 
-  const tansShipGeometry = new THREE.BoxGeometry(0.8, 0.25, 1.2);
-  const enemyTransShip1 = new THREE.Mesh(tansShipGeometry, enemyMaterial);
-  const teamTransShip1 = new THREE.Mesh(tansShipGeometry, teamMaterial);
-  const enemyTransShip2 = new THREE.Mesh(tansShipGeometry, enemyMaterial);
-  const teamTransShip2 = new THREE.Mesh(tansShipGeometry, teamMaterial);
-  scene.add(teamTransShip1, enemyTransShip1, teamTransShip2, enemyTransShip2);
-  enemyTransShip1.position.set(0.5, -0.5, -4);
-  enemyTransShip2.position.set(-3, 1, -3);
-  teamTransShip1.position.set(0, -0, 2);
-  teamTransShip2.position.set(4, 1.5, 0);
+  // const tansShipGeometry = new THREE.BoxGeometry(0.8, 0.25, 1.2);
+  // const enemyTransShip1 = new THREE.Mesh(tansShipGeometry, enemyMaterial);
+  // const teamTransShip1 = new THREE.Mesh(tansShipGeometry, teamMaterial);
+  // const enemyTransShip2 = new THREE.Mesh(tansShipGeometry, enemyMaterial);
+  // const teamTransShip2 = new THREE.Mesh(tansShipGeometry, teamMaterial);
+  // scene.add(teamTransShip1, enemyTransShip1, teamTransShip2, enemyTransShip2);
+  // enemyTransShip1.position.set(0.5, -0.5, -4);
+  // enemyTransShip2.position.set(-3, 1, -3);
+  // teamTransShip1.position.set(0, -0, 2);
+  // teamTransShip2.position.set(4, 1.5, 0);
 
   //fighters
 
-  const heroShip = new THREE.BoxGeometry(0.4, 0.4, 0.4);
-  const heroMaterial = new THREE.MeshStandardMaterial({ color: "orange" });
-  const heroMesh = new THREE.Mesh(heroShip, heroMaterial);
-  scene.add(heroMesh);
-  heroMesh.position.set(-10, 0, 0);
+  // const heroShip = new THREE.BoxGeometry(0.4, 0.4, 0.4);
+  // const heroMaterial = new THREE.MeshStandardMaterial({ color: "orange" });
+  // const heroMesh = new THREE.Mesh(heroShip, heroMaterial);
+  // scene.add(heroMesh);
+  // heroMesh.position.set(-10, 0, 0);
 
   /**
    * Points
@@ -181,41 +181,41 @@ if (false == true) {
   /**
    * Renderer
    */
-  const renderer = new THREE.WebGLRenderer({
-    canvas: canvas,
-    alpha: true,
-  });
+  // const renderer = new THREE.WebGLRenderer({
+  //   canvas: canvas,
+  //   alpha: true,
+  // });
 
-  renderer.setSize(sizes.width, sizes.height);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  // renderer.setSize(sizes.width, sizes.height);
+  // renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   /**
    * Animate
    */
 
-  const clock = new THREE.Clock();
-  let previousTime = 0;
+  // const clock = new THREE.Clock();
+  // let previousTime = 0;
 
-  const tick = () => {
-    const elapsedTime = clock.getElapsedTime();
-    const deltaTime = elapsedTime - previousTime;
-    previousTime = elapsedTime;
+  // const tick = () => {
+  //   const elapsedTime = clock.getElapsedTime();
+  //   const deltaTime = elapsedTime - previousTime;
+  //   previousTime = elapsedTime;
 
-    //update player
-    heroMesh.position.x += deltaTime;
-    if (heroMesh.position.x > 10) heroMesh.position.x = -10;
-    // camera.lookAt(heroMesh);
+  //update player
+  heroMesh.position.x += deltaTime;
+  if (heroMesh.position.x > 10) heroMesh.position.x = -10;
+  // camera.lookAt(heroMesh);
 
-    // Update controls
-    // controls.update();
+  // Update controls
+  // controls.update();
 
-    // Render
+  // Render
 
-    renderer.render(scene, camera);
+  // renderer.render(scene, camera);
 
-    // Call tick again on the next frame
-    window.requestAnimationFrame(tick);
-  };
+  // Call tick again on the next frame
+  // window.requestAnimationFrame(tick);
+  // };
 
   tick();
 }
