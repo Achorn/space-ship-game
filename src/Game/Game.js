@@ -5,6 +5,7 @@ import Time from "./Utils/Time";
 import Camera from "./Camera";
 import Renderer from "./Renderer";
 import World from "./World/World";
+import UserInput from "./UserInput";
 
 let instance = null;
 
@@ -17,6 +18,7 @@ export default class Game {
     this.canvas = canvas;
 
     // Setup
+    this.userInput = new UserInput();
     this.debug = new Debug();
     this.sizes = new Sizes();
     this.time = new Time();
@@ -35,6 +37,7 @@ export default class Game {
   }
   resize() {
     this.camera.resize();
+    this.world.update();
     this.renderer.resize();
   }
   update() {

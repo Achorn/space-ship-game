@@ -4,6 +4,8 @@ import * as THREE from "three";
 import Stars from "./Stars";
 import BoundarySphere from "./BoundarySphere";
 import Ships from "./Ships";
+import PlayerShip from "./PlayerShip";
+
 export default class World {
   constructor() {
     this.game = new Game();
@@ -11,10 +13,14 @@ export default class World {
 
     // set up objects in game
 
+    this.playerShip = null;
     this.stars = new Stars();
     this.sphereBoundary = new BoundarySphere();
     this.ships = new Ships();
+    this.playerShip = new PlayerShip();
     this.environment = new Environment();
   }
-  update() {}
+  update() {
+    this.playerShip.update();
+  }
 }

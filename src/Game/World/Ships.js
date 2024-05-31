@@ -33,25 +33,6 @@ export default class Ships {
     teamTransShip1.position.set(0, -0, 2);
     teamTransShip2.position.set(4, 1.5, 0);
 
-    const heroShip = new THREE.BoxGeometry(0.4, 0.4, 0.4);
-    const heroMaterial = new THREE.MeshStandardMaterial({ color: "orange" });
-    const heroMesh = new THREE.Mesh(heroShip, heroMaterial);
-    this.scene.add(heroMesh);
-    // heroMesh.position.set(-10, 0, 0);
-
-    // heroMesh.add(camera);
-    // adding camera to hero mesh instead of world
-    // camera.rotateY(-Math.PI * 0.5);
-    // camera.target = heroMesh;
-    // camera.rotateX(-Math.PI * 0.05);
-
-    // camera.position.x -= 3;
-    // camera.position.y += 0.7;
-
-    //update player
-    // heroMesh.position.x += deltaTime;
-    // if (heroMesh.position.x > 10) heroMesh.position.x = -10;
-
     this.setParticles();
     this.setGeometry();
     this.setMaterials();
