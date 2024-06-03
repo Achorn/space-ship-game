@@ -33,6 +33,17 @@ export default class Ships {
     teamTransShip1.position.set(0, -0, 2);
     teamTransShip2.position.set(4, 1.5, 0);
 
+    this.group = new THREE.Group();
+    this.group.add(
+      enemyShip,
+      teamShip,
+      enemyTransShip1,
+      enemyTransShip2,
+      teamTransShip1,
+      teamTransShip2
+    );
+    this.scene.add(this.group);
+    this.group.rotateY(Math.PI * 0.2);
     this.setParticles();
     this.setGeometry();
     this.setMaterials();

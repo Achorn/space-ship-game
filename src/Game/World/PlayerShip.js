@@ -13,7 +13,7 @@ export default class PlayerShip {
     this.y = new THREE.Vector3(0, 1, 0);
     this.z = new THREE.Vector3(0, 0, 1);
     this.rotMatrix = new THREE.Matrix4().makeBasis(this.x, this.y, this.z);
-    this.planePosition = new THREE.Vector3(0, 0, 0);
+    this.planePosition = new THREE.Vector3(0, 2, 20);
     // Methods
     this.setGeometry();
     this.setMaterials();

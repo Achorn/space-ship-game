@@ -8,7 +8,7 @@ export default class UserInput {
     this.pitchVelocity = 0;
     this.turnVelocity = 0;
 
-    this.planeSpeed = 0.04;
+    this.planeSpeed = 0.03;
   }
 
   setListeners() {
