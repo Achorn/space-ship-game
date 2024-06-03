@@ -9,11 +9,13 @@ export default class UserInput {
     this.turnVelocity = 0;
 
     this.planeSpeed = 0.03;
+    this.speedModifier = 0.03;
   }
 
   setListeners() {
     document.addEventListener("keydown", (e) => {
       this.controls[e.key.toLowerCase()] = true;
+      console.log(e.key);
     });
     document.addEventListener(
       "keyup",
@@ -24,6 +26,7 @@ export default class UserInput {
     this.jawVelocity *= 0.95;
     this.pitchVelocity *= 0.95;
     this.turnVelocity *= 0.95;
+    this.speedModifier *= 0.95;
 
     if (Math.abs(this.jawVelocity) > this.maxVelocity) {
       this.jawVelocity = Math.sign(this.jawVelocity) * this.maxVelocity;
@@ -33,6 +36,17 @@ export default class UserInput {
     }
     if (Math.abs(this.turnVelocity) > this.maxVelocity) {
       this.turnVelocity = Math.sign(this.turnVelocity) * this.maxVelocity;
+    }
+    if (Math.abs(this.speedModifier) > this.maxVelocity) {
+      this.speedModifier = Math.sign(this.speedModifier) * this.maxVelocity;
+    }
+
+    if (this.controls["arrowup"]) {
+      // ship speed modifier
+      this.speedModifier += 0.0025;
+    }
+    if (this.controls["arrowdown"]) {
+      this.speedModifier -= 0.0025;
     }
 
     if (this.controls["arrowleft"]) {
@@ -72,6 +86,8 @@ export default class UserInput {
     y.normalize();
     z.normalize();
 
-    planePosition.add(z.clone().multiplyScalar(-this.planeSpeed));
+    planePosition.add(
+      z.clone().multiplyScalar(-(this.planeSpeed + this.speedModifier))
+    );
   }
 }
