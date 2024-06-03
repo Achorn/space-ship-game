@@ -9,7 +9,11 @@ export default class PlayerShip {
     // variables
     this.speed = 0.01;
     this.matrix;
-
+    this.x = new THREE.Vector3(1, 0, 0);
+    this.y = new THREE.Vector3(0, 1, 0);
+    this.z = new THREE.Vector3(0, 0, 1);
+    this.rotMatrix = new THREE.Matrix4().makeBasis(this.x, this.y, this.z);
+    this.planePosition = new THREE.Vector3(0, 0, 0);
     // Methods
     this.setGeometry();
     this.setMaterials();
@@ -35,38 +39,29 @@ export default class PlayerShip {
   }
 
   update() {
-    this.matrix = new THREE.Matrix4().multiply(
-      new THREE.Matrix4().makeTranslation(
-        this.instance.position.x,
-        this.instance.position.y,
-        this.instance.position.z
-      )
+    this.game.userInput.updatePlaneAxis(
+      this.x,
+      this.y,
+      this.z,
+      this.planePosition,
+      this.game.camera
     );
-    // console.log(this.game.time.delta);
-    // this.instance.position.x += 0.001 * this.game.time.delta;
-    // this.instance.rotateZ(Math.PI * 0.01);
-    // const direction = this.game.userInput.getDirection();
-    // const deltaTime = this.game.time.delta;
-    // if (direction) {
-    //   console.log(this.angle);
-    //   if (direction == "left") {
-    //     this.angle -= 0.01;
-    //   } else {
-    //     this.angle += 0.01;
-    //   }
-    //   this.instance.rotation.y = -this.angle;
-    // }
-    // let [xd, zd] = this.getSides(this.speed, this.angle * 180);
-    // this.instance.position.x += xd;
-    // this.instance.position.z += zd;
+    this.rotMatrix = new THREE.Matrix4().makeBasis(this.x, this.y, this.z);
+
+    this.matrix = new THREE.Matrix4().multiply(
+      // planes position
+      new THREE.Matrix4()
+        .makeTranslation(
+          this.planePosition.x,
+          this.planePosition.y,
+          this.planePosition.z
+        )
+        //planes rotation
+        .multiply(this.rotMatrix)
+    );
+    this.instance.matrixAutoUpdate = false;
+    this.instance.matrix.copy(this.matrix);
+    this.instance.matrixWorldNeedsUpdate = true;
   }
   draw() {}
-
-  getSides = (hypotenuse, angle) => {
-    let cosOfAngle = Math.cos((Math.PI / 180) * angle).toFixed(2);
-    let sinOfAngle = Math.sin((Math.PI / 180) * angle).toFixed(2);
-    let x = hypotenuse * cosOfAngle;
-    let y = hypotenuse * sinOfAngle;
-    return [x, y];
-  };
 }

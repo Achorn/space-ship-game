@@ -5,7 +5,7 @@ import { OrbitControls } from "three/examples/jsm/Addons.js";
 export default class Camera {
   constructor() {
     this.game = new Game();
-    this.ship = this.game.playerShip;
+    this.ship = this.game.world.playerShip;
     this.sizes = this.game.sizes;
     this.scene = this.game.scene;
     this.canvas = this.game.canvas;
@@ -34,14 +34,17 @@ export default class Camera {
   }
   update() {
     const cameraMatrix = new THREE.Matrix4()
+
       // place camera in center of player ship
       .multiply(
         new THREE.Matrix4().makeTranslation(
-          this.ship.position.x,
-          this.ship.position.y,
-          this.ship.position.z
+          this.ship.planePosition.x,
+          this.ship.planePosition.y,
+          this.ship.planePosition.z
         )
       )
+      // player rotation matrix
+      .multiply(this.ship.rotMatrix)
       //angle camera down a little
       .multiply(new THREE.Matrix4().makeRotationX(-0.2))
       // pull camera behind player ship

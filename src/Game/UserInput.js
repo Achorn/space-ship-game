@@ -1,28 +1,61 @@
 export default class UserInput {
   constructor() {
-    this.pressedKeys = [];
+    this.controls = {};
     this.setListeners();
+
+    this.jawVelocity = 0;
+    this.pitchVelocity = 0;
+    this.turnVelocity = 0;
+
+    this.planeSpeed = 0.04;
   }
+
   setListeners() {
     document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") this.addKey("left");
-      if (e.key === "ArrowRight") this.addKey("right");
+      this.controls[e.key.toLowerCase()] = true;
     });
-    document.addEventListener("keyup", (e) => {
-      if (e.key === "ArrowLeft") this.removeKey("left");
-      if (e.key === "ArrowRight") this.removeKey("right");
-    });
+    document.addEventListener(
+      "keyup",
+      (e) => (this.controls[e.key.toLowerCase()] = false)
+    );
   }
-  addKey(key) {
-    if (!this.pressedKeys.includes(key)) this.pressedKeys.push(key);
-  }
-  removeKey(key) {
-    this.pressedKeys = this.pressedKeys.filter((k) => k != key);
-  }
-  getDirection() {
-    // TODO: more of a movedment angle than direction
-    if (this.pressedKeys.length > 0)
-      return this.pressedKeys[this.pressedKeys.length - 1];
-    else return null;
+  updatePlaneAxis(x, y, z, planePosition, camera) {
+    this.jawVelocity = 0;
+    this.pitchVelocity = 0;
+    this.turnVelocity = 0;
+
+    if (this.controls["arrowleft"]) {
+      this.jawVelocity = 0.025;
+    }
+    if (this.controls["arrowright"]) {
+      this.jawVelocity = -0.025;
+    }
+
+    if (this.controls["s"]) {
+      this.pitchVelocity = 0.025;
+    }
+    if (this.controls["w"]) {
+      this.pitchVelocity = -0.025;
+    }
+    if (this.controls["a"]) {
+      this.turnVelocity = 0.025;
+    }
+    if (this.controls["d"]) {
+      this.turnVelocity = -0.025;
+    }
+    x.applyAxisAngle(y, this.turnVelocity);
+    z.applyAxisAngle(y, this.turnVelocity);
+
+    x.applyAxisAngle(z, this.jawVelocity);
+    y.applyAxisAngle(z, this.jawVelocity);
+
+    y.applyAxisAngle(x, this.pitchVelocity);
+    z.applyAxisAngle(x, this.pitchVelocity);
+
+    x.normalize();
+    y.normalize();
+    z.normalize();
+
+    planePosition.add(z.clone().multiplyScalar(-this.planeSpeed));
   }
 }
