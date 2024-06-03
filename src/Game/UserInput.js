@@ -3,6 +3,7 @@ export default class UserInput {
     this.controls = {};
     this.setListeners();
 
+    this.maxVelocity = 0.4;
     this.jawVelocity = 0;
     this.pitchVelocity = 0;
     this.turnVelocity = 0;
@@ -20,29 +21,44 @@ export default class UserInput {
     );
   }
   updatePlaneAxis(x, y, z, planePosition, camera) {
-    this.jawVelocity = 0;
-    this.pitchVelocity = 0;
-    this.turnVelocity = 0;
+    this.jawVelocity *= 0.95;
+    this.pitchVelocity *= 0.95;
+    this.turnVelocity *= 0.95;
+
+    if (Math.abs(this.jawVelocity) > this.maxVelocity) {
+      this.jawVelocity = Math.sign(this.jawVelocity) * this.maxVelocity;
+    }
+    if (Math.abs(this.pitchVelocity) > this.maxVelocity) {
+      this.pitchVelocity = Math.sign(this.pitchVelocity) * this.maxVelocity;
+    }
+    if (Math.abs(this.turnVelocity) > this.maxVelocity) {
+      this.turnVelocity = Math.sign(this.turnVelocity) * this.maxVelocity;
+    }
 
     if (this.controls["arrowleft"]) {
-      this.jawVelocity = 0.025;
+      // ship barrel rolling
+      this.jawVelocity += 0.0025;
     }
     if (this.controls["arrowright"]) {
-      this.jawVelocity = -0.025;
+      this.jawVelocity -= 0.0025;
     }
 
+    // turn up and down
     if (this.controls["s"]) {
-      this.pitchVelocity = 0.025;
+      this.pitchVelocity += 0.0025;
     }
     if (this.controls["w"]) {
-      this.pitchVelocity = -0.025;
+      this.pitchVelocity -= 0.0025;
     }
+
+    // turn left and right
     if (this.controls["a"]) {
-      this.turnVelocity = 0.025;
+      this.turnVelocity += 0.0025;
     }
     if (this.controls["d"]) {
-      this.turnVelocity = -0.025;
+      this.turnVelocity -= 0.0025;
     }
+
     x.applyAxisAngle(y, this.turnVelocity);
     z.applyAxisAngle(y, this.turnVelocity);
 
