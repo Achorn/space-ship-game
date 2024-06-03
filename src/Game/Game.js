@@ -23,9 +23,9 @@ export default class Game {
     this.sizes = new Sizes();
     this.time = new Time();
     this.scene = new THREE.Scene();
+    this.world = new World();
     this.camera = new Camera();
     this.renderer = new Renderer();
-    this.world = new World();
 
     // Sizes resize event
     this.sizes.on("resize", () => {

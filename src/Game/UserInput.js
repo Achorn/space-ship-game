@@ -20,6 +20,7 @@ export default class UserInput {
     this.pressedKeys = this.pressedKeys.filter((k) => k != key);
   }
   getDirection() {
+    // TODO: more of a movedment angle than direction
     if (this.pressedKeys.length > 0)
       return this.pressedKeys[this.pressedKeys.length - 1];
     else return null;
