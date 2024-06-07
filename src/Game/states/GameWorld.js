@@ -16,9 +16,9 @@ export default class GameWorld extends GameState {
 
   render(context) {
     //draw yellow background
-    context.beginPath();
-    context.fillStyle = "#ff6";
-    context.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    // context.beginPath();
+    // context.fillStyle = "#ff6";
+    // context.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
     // Draw blue triangle
     context.beginPath();
