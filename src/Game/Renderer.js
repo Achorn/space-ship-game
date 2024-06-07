@@ -19,6 +19,10 @@ export default class Renderer {
     });
     this.instance.setSize(this.sizes.width, this.sizes.height);
     this.instance.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    //2d canvas
+    this.canvas2d.width = this.sizes.width;
+    this.canvas2d.height = this.sizes.height;
   }
   resize() {
     this.instance.setSize(this.sizes.width, this.sizes.height);
@@ -26,8 +30,8 @@ export default class Renderer {
 
     // resizing 2d canvas
     // TODO should this resize happen somewhere else? this might be a threejs renderer, not a generic renderer
-    this.canvas2d.width = this.width;
-    this.canvas2d.height = this.height;
+    this.canvas2d.width = this.sizes.width;
+    this.canvas2d.height = this.sizes.height;
   }
   update() {
     this.instance.render(this.scene, this.camera.instance);
