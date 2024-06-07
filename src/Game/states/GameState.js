@@ -18,6 +18,6 @@ export default class GameState {
   }
 
   exitState() {
-    this.game.st;
+    this.game.stateStack.pop();
   }
 }

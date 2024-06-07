@@ -35,6 +35,6 @@ export default class GameWorld extends GameState {
 
     context.font = "24px serif";
     context.fillStyle = "blue";
-    context.fillText("press escape to pause", 100, 200);
+    context.fillText("press 'p' to pause", 100, 200);
   }
 }

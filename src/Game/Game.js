@@ -54,15 +54,15 @@ export default class Game {
   }
   update() {
     //todo update top of state stack
-    this.camera.update();
-    this.world.update();
+    // this.camera.update();
+    // this.world.update();
     this.renderer.update();
 
+    this.context2d.clearRect(0, 0, window.innerWidth, window.innerHeight);
     this.stateStack[this.stateStack.length - 1].update(
       this.time.delta,
       this.userInput.controls
     );
-    this.context2d.clearRect(0, 0, window.innerWidth, window.innerHeight);
     this.stateStack[this.stateStack.length - 1].render(this.context2d);
   }
   destroy() {}
