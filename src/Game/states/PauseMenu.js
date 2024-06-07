@@ -5,10 +5,12 @@ export default class PauseMenu extends GameState {
     super();
   }
   update(deltaTime, actions) {
-    if (actions["p"]) {
+    if (actions["p"] == true) {
       this.exitState();
     }
-    if (actions["q"]) {
+    if (actions["q"] == true) {
+      this.game.userInput.resetKeys();
+
       while (this.game.stateStack.length > 1) {
         this.game.stateStack.pop();
       }

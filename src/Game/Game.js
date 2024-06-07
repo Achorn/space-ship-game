@@ -18,7 +18,6 @@ export default class Game {
     // Options
     this.canvas = canvas;
     this.canvas2d = canvas2d;
-    console.log(this.canvas2d);
     this.context2d = this.canvas2d.getContext("2d");
 
     // Setup

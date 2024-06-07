@@ -7,7 +7,7 @@ export default class GameWorld extends GameState {
   }
 
   update(deltaTime, actions) {
-    if (actions["p"]) {
+    if (actions["p"] == true) {
       let newState = new PauseMenu();
       newState.enterState();
     }
