@@ -26,6 +26,7 @@ export default class Game {
     this.world = new World();
     this.camera = new Camera();
     this.renderer = new Renderer();
+    this.stateStack = [];
 
     // Sizes resize event
     this.sizes.on("resize", () => {
@@ -41,6 +42,7 @@ export default class Game {
     this.renderer.resize();
   }
   update() {
+    //todo update top of state stack
     this.camera.update();
     this.world.update();
     this.renderer.update();

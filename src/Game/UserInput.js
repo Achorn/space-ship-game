@@ -90,4 +90,8 @@ export default class UserInput {
       z.clone().multiplyScalar(-(this.planeSpeed + this.speedModifier))
     );
   }
+
+  resetKeys() {
+    this.controls = {};
+  }
 }
