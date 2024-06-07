@@ -5,11 +5,13 @@ import { OrbitControls } from "three/examples/jsm/Addons.js";
 export default class Camera {
   constructor() {
     this.game = new Game();
+    this.ship = this.game.world.playerShip;
     this.sizes = this.game.sizes;
     this.scene = this.game.scene;
     this.canvas = this.game.canvas;
+
     this.setInstance();
-    this.setOrbitControls();
+    // this.setOrbitControls();
   }
   setInstance() {
     this.instance = new THREE.PerspectiveCamera(
@@ -18,7 +20,8 @@ export default class Camera {
       0.1,
       100
     );
-    this.instance.position.set(6, 4, 8);
+    // this.instance.position.set(6, 4, 8);
+    this.instance.position.set(-4, 4, 0);
     this.scene.add(this.instance);
   }
   setOrbitControls() {
@@ -30,6 +33,27 @@ export default class Camera {
     this.instance.updateProjectionMatrix();
   }
   update() {
-    this.controls.update(); // for orbit controls not being used
+    const cameraMatrix = new THREE.Matrix4()
+
+      // place camera in center of player ship
+      .multiply(
+        new THREE.Matrix4().makeTranslation(
+          this.ship.planePosition.x,
+          this.ship.planePosition.y,
+          this.ship.planePosition.z
+        )
+      )
+      // player rotation matrix
+      .multiply(this.ship.rotMatrix)
+      //angle camera down a little
+      .multiply(new THREE.Matrix4().makeRotationX(-0.2))
+      // pull camera behind player ship
+      .multiply(new THREE.Matrix4().makeTranslation(0, 0.1, 3));
+
+    this.instance.matrixAutoUpdate = false;
+    this.instance.matrix.copy(cameraMatrix);
+    this.instance.matrixWorldNeedsUpdate = true;
+
+    // this.controls.update(); // for orbit controls not being used
   }
 }
