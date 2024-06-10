@@ -15,7 +15,6 @@ export default class UserInput {
   setListeners() {
     document.addEventListener("keydown", (e) => {
       this.controls[e.key.toLowerCase()] = true;
-      console.log(e.key);
     });
     document.addEventListener(
       "keyup",
@@ -89,5 +88,17 @@ export default class UserInput {
     planePosition.add(
       z.clone().multiplyScalar(-(this.planeSpeed + this.speedModifier))
     );
+  }
+
+  resetKeys() {
+    this.controls = {};
+  }
+  atLeastOneKeyBeingPressed() {
+    var keys = Object.keys(this.controls);
+
+    var filtered = keys.filter(function (key) {
+      this.controls[key];
+    });
+    return filtered.length != 0;
   }
 }

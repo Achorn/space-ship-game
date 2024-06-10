@@ -5,7 +5,7 @@ import { OrbitControls } from "three/examples/jsm/Addons.js";
 export default class Camera {
   constructor() {
     this.game = new Game();
-    this.ship = this.game.world.playerShip;
+    // this.ship = this.game.world.playerShip;
     this.sizes = this.game.sizes;
     this.scene = this.game.scene;
     this.canvas = this.game.canvas;
@@ -33,6 +33,8 @@ export default class Camera {
     this.instance.updateProjectionMatrix();
   }
   update() {
+    // TODO decouple hardcoded third person camera controls
+    // {
     const cameraMatrix = new THREE.Matrix4()
 
       // place camera in center of player ship
@@ -53,6 +55,7 @@ export default class Camera {
     this.instance.matrixAutoUpdate = false;
     this.instance.matrix.copy(cameraMatrix);
     this.instance.matrixWorldNeedsUpdate = true;
+    //}
 
     // this.controls.update(); // for orbit controls not being used
   }
