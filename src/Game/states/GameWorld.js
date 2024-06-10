@@ -1,11 +1,11 @@
 import World from "../World/World";
 import GameState from "./GameState";
 import PauseMenu from "./PauseMenu";
+import * as THREE from "three";
 
 export default class GameWorld extends GameState {
   constructor() {
     super();
-
     this.world = new World();
     this.game.camera.ship = this.world.playerShip;
   }
@@ -21,11 +21,6 @@ export default class GameWorld extends GameState {
   }
 
   render(context) {
-    //draw yellow background
-    // context.beginPath();
-    // context.fillStyle = "#ff6";
-    // context.fillRect(0, 0, window.innerWidth, window.innerHeight);
-
     // Draw blue triangle
     context.beginPath();
     context.fillStyle = "blue";
@@ -42,5 +37,57 @@ export default class GameWorld extends GameState {
     context.font = "24px serif";
     context.fillStyle = "blue";
     context.fillText("press 'p' to pause", 100, 200);
+  }
+
+  exitState() {
+    super.exitState();
+    this.cleanUp();
+  }
+  cleanUp() {
+    super.cleanUp();
+    // delete all threejs objects made from world map
+
+    //Traverse entire scene (maybe traverse world group in future)
+    // this.game.scene.traverse((child) => {
+    //   //dispose mesh
+    //   //dispose geometry
+    //   if (child instanceof THREE.Mesh) {
+    //     console.log(child);
+    //     child.geometry.dispose();
+
+    //     for (const key in child.material) {
+    //       console.log(key);
+    //       const value = child.material[key];
+    //       if (value && typeof value.dispose === "function") {
+    //         value.dispose();
+    //       }
+    //     }
+    //   }
+    // });
+    // r
+
+    // remove single player ship
+
+    this.game.scene.remove(this.world.playerShip.instance);
+    this.world.playerShip.geometry.dispose();
+    this.world.playerShip.material.dispose();
+
+    //remove all ships,
+    this.world.ships.cleanUp();
+    //remove stars
+
+    this.world.stars.cleanUp();
+
+    //remove light
+    let amLight = this.world.environment.ambientLight;
+    this.game.scene.remove(amLight);
+    let diLight = this.world.environment.directionalLight;
+    this.game.scene.remove(diLight);
+
+    // remove sphere
+
+    this.game.scene.remove(this.world.sphereBoundary.instance);
+    this.world.sphereBoundary.instance.geometry.dispose();
+    this.world.sphereBoundary.instance.material.dispose();
   }
 }

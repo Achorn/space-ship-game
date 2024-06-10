@@ -20,4 +20,5 @@ export default class GameState {
   exitState() {
     this.game.stateStack.pop();
   }
+  cleanUp() {}
 }

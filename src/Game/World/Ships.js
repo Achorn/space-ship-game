@@ -53,4 +53,12 @@ export default class Ships {
   setGeometry() {}
   setMaterials() {}
   setMesh() {}
+
+  cleanUp() {
+    this.scene.remove(this.group);
+    this.group.children.forEach((child) => {
+      child.geometry.dispose();
+      child.material.dispose();
+    });
+  }
 }

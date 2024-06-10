@@ -12,6 +12,8 @@ export default class Title extends GameState {
       let newState = new GameWorld(this.game);
       newState.enterState();
     }
+    // this.game.camera.update();
+
     this.game.userInput.resetKeys();
   }
   render(context) {

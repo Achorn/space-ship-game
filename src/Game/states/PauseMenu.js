@@ -12,7 +12,7 @@ export default class PauseMenu extends GameState {
       this.game.userInput.resetKeys();
 
       while (this.game.stateStack.length > 1) {
-        this.game.stateStack.pop();
+        this.game.stateStack[this.game.stateStack.length - 1].exitState();
       }
     }
     this.game.userInput.resetKeys();

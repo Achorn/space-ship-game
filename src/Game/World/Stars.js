@@ -43,4 +43,9 @@ export default class Stars {
     );
     this.scene.add(this.instance);
   }
+  cleanUp() {
+    this.scene.remove(this.instance);
+    this.instance.geometry.dispose();
+    this.instance.material.dispose();
+  }
 }
