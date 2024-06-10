@@ -26,7 +26,7 @@ export default class Game {
     this.sizes = new Sizes();
     this.time = new Time();
     this.scene = new THREE.Scene();
-    this.world = new World();
+    // this.world = new World();
     this.camera = new Camera();
     this.renderer = new Renderer();
     this.stateStack = [];
@@ -48,13 +48,12 @@ export default class Game {
 
   resize() {
     this.camera.resize();
-    this.world.update();
+    // this.world.update();
     this.renderer.resize();
   }
   update() {
     //todo update top of state stack
     // this.camera.update();
-    // this.world.update();
     this.renderer.update();
 
     this.context2d.clearRect(0, 0, window.innerWidth, window.innerHeight);

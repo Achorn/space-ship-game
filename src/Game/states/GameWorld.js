@@ -1,17 +1,23 @@
+import World from "../World/World";
 import GameState from "./GameState";
 import PauseMenu from "./PauseMenu";
 
 export default class GameWorld extends GameState {
   constructor() {
     super();
+
+    this.world = new World();
+    this.game.camera.ship = this.world.playerShip;
   }
 
   update(deltaTime, actions) {
     if (actions["p"] == true) {
       let newState = new PauseMenu();
       newState.enterState();
+      this.game.userInput.resetKeys();
     }
-    this.game.userInput.resetKeys();
+    this.game.camera.update();
+    this.world.update();
   }
 
   render(context) {
