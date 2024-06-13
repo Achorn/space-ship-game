@@ -47,13 +47,7 @@ export default class PlayerShip {
   }
 
   update() {
-    this.game.userInput.updatePlaneAxis(
-      this.x,
-      this.y,
-      this.z,
-      this.planePosition,
-      this.game.camera
-    );
+    this.updatePlaneAxis(this.x, this.y, this.z, this.planePosition);
     this.rotMatrix = new THREE.Matrix4().makeBasis(this.x, this.y, this.z);
 
     this.matrix = new THREE.Matrix4().multiply(
@@ -71,7 +65,7 @@ export default class PlayerShip {
     this.instance.matrix.copy(this.matrix);
     this.instance.matrixWorldNeedsUpdate = true;
   }
-  updatePlaneAxis(x, y, z, planePosition, camera) {
+  updatePlaneAxis(x, y, z, planePosition) {
     this.jawVelocity *= 0.95;
     this.pitchVelocity *= 0.95;
     this.turnVelocity *= 0.95;
@@ -90,35 +84,35 @@ export default class PlayerShip {
       this.speedModifier = Math.sign(this.speedModifier) * this.maxVelocity;
     }
 
-    if (this.controls["arrowup"]) {
+    if (this.game.userInput.controls["arrowup"]) {
       // ship speed modifier
       this.speedModifier += 0.0025;
     }
-    if (this.controls["arrowdown"]) {
+    if (this.game.userInput.controls["arrowdown"]) {
       this.speedModifier -= 0.0025;
     }
 
-    if (this.controls["arrowleft"]) {
+    if (this.game.userInput.controls["arrowleft"]) {
       // ship barrel rolling
       this.jawVelocity += 0.0025;
     }
-    if (this.controls["arrowright"]) {
+    if (this.game.userInput.controls["arrowright"]) {
       this.jawVelocity -= 0.0025;
     }
 
     // turn up and down
-    if (this.controls["s"]) {
+    if (this.game.userInput.controls["s"]) {
       this.pitchVelocity += 0.0025;
     }
-    if (this.controls["w"]) {
+    if (this.game.userInput.controls["w"]) {
       this.pitchVelocity -= 0.0025;
     }
 
     // turn left and right
-    if (this.controls["a"]) {
+    if (this.game.userInput.controls["a"]) {
       this.turnVelocity += 0.0025;
     }
-    if (this.controls["d"]) {
+    if (this.game.userInput.controls["d"]) {
       this.turnVelocity -= 0.0025;
     }
 
