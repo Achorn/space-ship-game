@@ -17,7 +17,7 @@ export default class GameWorld extends GameState {
       this.game.userInput.resetKeys();
     }
     this.game.camera.update();
-    this.world.update();
+    this.world.update(deltaTime);
   }
 
   render(context) {

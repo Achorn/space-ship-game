@@ -24,11 +24,11 @@ export default class ThirdPersonShipCamera {
     idealOffset.add(this.target.position);
   }
 
-  Update(timeElapsed) {
+  update(timeElapsed) {
     const idealOffset = this.calculateIdealOffset();
     const idealLookat = this.calculateIdealLookat();
 
-    const t = 1.0;
+    let t = 1.0;
     t -= Math.pow(0.001, timeElapsed);
 
     this.currentPosition.lerp(idealOffset, t);

@@ -5,6 +5,7 @@ import Stars from "./Stars";
 import BoundarySphere from "./BoundarySphere";
 import Ships from "./Ships";
 import PlayerShip from "./PlayerShip";
+import ThirdPersonShipCamera from "../Utils/cameras/ThirdPersonShipCamera";
 
 export default class World {
   constructor() {
@@ -17,9 +18,14 @@ export default class World {
     this.sphereBoundary = new BoundarySphere();
     this.ships = new Ships();
     this.playerShip = new PlayerShip();
+    // this.thirPersonCamera = new ThirdPersonShipCamera(
+    // this.game.camera.instance,
+    // this.playerShip.instance
+    // );
     this.environment = new Environment();
   }
-  update() {
+  update(elapsedTime) {
     this.playerShip.update();
+    // this.thirPersonCamera.update(elapsedTime);
   }
 }

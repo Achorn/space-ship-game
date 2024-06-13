@@ -5,7 +5,6 @@ import { OrbitControls } from "three/examples/jsm/Addons.js";
 export default class Camera {
   constructor() {
     this.game = new Game();
-    // this.ship = this.game.world.playerShip;
     this.sizes = this.game.sizes;
     this.scene = this.game.scene;
     this.canvas = this.game.canvas;
