@@ -31,10 +31,14 @@ export default class BasicShipController {
   get Position() {
     return this.position;
   }
-  get rotation() {}
+  get Rotation() {
+    if (!this.target) {
+      return new THREE.Quaternion();
+    }
+    return this.target.quaternion;
+  }
 
   update() {
-    console.log("hello?");
     this.updatePlaneAxis(this.x, this.y, this.z, this.planePosition);
     this.rotMatrix = new THREE.Matrix4().makeBasis(this.x, this.y, this.z);
 
@@ -120,5 +124,6 @@ export default class BasicShipController {
     planePosition.add(
       z.clone().multiplyScalar(-(this.planeSpeed + this.speedModifier))
     );
+    this.position.copy(planePosition);
   }
 }

@@ -2,7 +2,7 @@ import World from "../World/World";
 import GameState from "./GameState";
 import PauseMenu from "./PauseMenu";
 import BasicShipController from "../Utils/controllers/BasicShipController";
-import * as THREE from "three";
+import ThirdPersonShipCamera from "../Utils/cameras/ThirdPersonShipCamera";
 
 export default class GameWorld extends GameState {
   constructor() {
@@ -11,6 +11,10 @@ export default class GameWorld extends GameState {
     this.game.camera.ship = this.world.playerShip;
 
     this.controls = new BasicShipController(this.world.playerShip.instance);
+    this.thirdPersonCamera = new ThirdPersonShipCamera(
+      this.game.camera.instance,
+      this.controls
+    );
   }
 
   update(deltaTime) {
@@ -22,6 +26,7 @@ export default class GameWorld extends GameState {
     this.game.camera.update();
     this.world.update(deltaTime);
     this.controls.update(deltaTime);
+    this.thirdPersonCamera.update(deltaTime);
   }
 
   render(context) {

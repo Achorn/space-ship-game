@@ -12,29 +12,51 @@ export default class ThirdPersonShipCamera {
   calculateIdealOffset() {
     const idealOffset = new THREE.Vector3(0, 30, -40);
 
-    idealOffset.applyQuaternion(this.target.rotation);
+    idealOffset.applyQuaternion(this.target.Rotation);
 
-    idealOffset.add(this.target.position);
+    return idealOffset.add(this.target.Position);
   }
   calculateIdealLookat() {
-    const idealOffset = new THREE.Vector3(0, 10, 50);
+    const idealLookat = new THREE.Vector3(0, 10, 50);
 
-    idealOffset.applyQuaternion(this.target.rotation);
+    idealLookat.applyQuaternion(this.target.Rotation);
 
-    idealOffset.add(this.target.position);
+    return idealLookat.add(this.target.Position);
   }
 
   update(timeElapsed) {
-    const idealOffset = this.calculateIdealOffset();
-    const idealLookat = this.calculateIdealLookat();
+    // console.log("updating?");
+    // const idealOffset = this.calculateIdealOffset();
+    // const idealLookat = this.calculateIdealLookat();
+    // let t = 1.0;
+    // t -= Math.pow(0.001, timeElapsed);
+    // // console.log(idealOffset, idealLookat);
+    // this.currentPosition.lerp(idealOffset, t);
+    // this.currentLookat.lerp(idealLookat, t);
+    // this.camera.position.copy(this.currentPosition);
+    // this.camera.lookAt(this.currentPosition);
 
-    let t = 1.0;
-    t -= Math.pow(0.001, timeElapsed);
-
-    this.currentPosition.lerp(idealOffset, t);
-    this.currentLookat.lerp(idealLookat, t);
-
-    this.camera.position.copy(this.currentPosition);
-    this.camera.lookat(this.currentPosition);
+    // TODO decouple hardcoded third person camera controls
+    // // {
+    const cameraMatrix = new THREE.Matrix4()
+      //   // place camera in center of player ship
+      .multiply(
+        new THREE.Matrix4().makeTranslation(
+          this.target.planePosition.x,
+          this.target.planePosition.y,
+          this.target.planePosition.z
+        )
+      )
+      // player rotation matrix
+      .multiply(this.target.rotMatrix)
+      // angle camera down a little
+      .multiply(new THREE.Matrix4().makeRotationX(-0.2))
+      // pull camera behind player target
+      .multiply(new THREE.Matrix4().makeTranslation(0, 0.1, 3));
+    this.camera.matrixAutoUpdate = false;
+    this.camera.matrix.copy(cameraMatrix);
+    this.camera.matrixWorldNeedsUpdate = true;
+    // }
+    // this.controls.update(); // for orbit controls not being used
   }
 }

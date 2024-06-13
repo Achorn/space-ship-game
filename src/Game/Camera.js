@@ -33,29 +33,26 @@ export default class Camera {
   }
   update() {
     // TODO decouple hardcoded third person camera controls
-    // {
-    const cameraMatrix = new THREE.Matrix4()
-
-      // place camera in center of player ship
-      .multiply(
-        new THREE.Matrix4().makeTranslation(
-          this.ship.planePosition.x,
-          this.ship.planePosition.y,
-          this.ship.planePosition.z
-        )
-      )
-      // player rotation matrix
-      .multiply(this.ship.rotMatrix)
-      //angle camera down a little
-      .multiply(new THREE.Matrix4().makeRotationX(-0.2))
-      // pull camera behind player ship
-      .multiply(new THREE.Matrix4().makeTranslation(0, 0.1, 3));
-
-    this.instance.matrixAutoUpdate = false;
-    this.instance.matrix.copy(cameraMatrix);
-    this.instance.matrixWorldNeedsUpdate = true;
+    // // {
+    // const cameraMatrix = new THREE.Matrix4()
+    //   // place camera in center of player ship
+    //   .multiply(
+    //     new THREE.Matrix4().makeTranslation(
+    //       this.ship.planePosition.x,
+    //       this.ship.planePosition.y,
+    //       this.ship.planePosition.z
+    //     )
+    //   )
+    //   // player rotation matrix
+    //   .multiply(this.ship.rotMatrix)
+    //   //angle camera down a little
+    //   .multiply(new THREE.Matrix4().makeRotationX(-0.2))
+    //   // pull camera behind player ship
+    //   .multiply(new THREE.Matrix4().makeTranslation(0, 0.1, 3));
+    // this.instance.matrixAutoUpdate = false;
+    // this.instance.matrix.copy(cameraMatrix);
+    // this.instance.matrixWorldNeedsUpdate = true;
     //}
-
     // this.controls.update(); // for orbit controls not being used
   }
 }
