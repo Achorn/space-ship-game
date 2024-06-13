@@ -9,6 +9,7 @@ export default class BasicCharacterControllerInput {
       rotateRight: false,
       down: false,
       up: false,
+      start: false,
     };
     document.addEventListener("keydown", (e) => this.onKeyDown(e), false);
     document.addEventListener("keyup", (e) => this.onKeyUp(e), false);

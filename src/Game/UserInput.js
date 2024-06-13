@@ -17,12 +17,4 @@ export default class UserInput {
   resetKeys() {
     this.controls = {};
   }
-  atLeastOneKeyBeingPressed() {
-    var keys = Object.keys(this.controls);
-
-    var filtered = keys.filter(function (key) {
-      this.controls[key];
-    });
-    return filtered.length != 0;
-  }
 }

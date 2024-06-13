@@ -10,8 +10,8 @@ export default class GameWorld extends GameState {
     this.game.camera.ship = this.world.playerShip;
   }
 
-  update(deltaTime, actions) {
-    if (actions["p"] == true) {
+  update(deltaTime) {
+    if (this.game.userInput.controls["p"] == true) {
       let newState = new PauseMenu();
       newState.enterState();
       this.game.userInput.resetKeys();
