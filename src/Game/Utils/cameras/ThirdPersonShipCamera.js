@@ -10,36 +10,38 @@ export default class ThirdPersonShipCamera {
   }
 
   calculateIdealOffset() {
-    const idealOffset = new THREE.Vector3(0, 30, -40);
+    const idealOffset = new THREE.Vector3(10, 30, -40);
 
     idealOffset.applyQuaternion(this.target.Rotation);
 
     return idealOffset.add(this.target.Position);
   }
   calculateIdealLookat() {
-    const idealLookat = new THREE.Vector3(0, 10, 50);
-
+    const idealLookat = new THREE.Vector3(10, 10, 50);
+    console.log(this.target.Rotation);
     idealLookat.applyQuaternion(this.target.Rotation);
 
     return idealLookat.add(this.target.Position);
   }
 
   update(timeElapsed) {
-    // console.log("updating?");
-    // const idealOffset = this.calculateIdealOffset();
-    // const idealLookat = this.calculateIdealLookat();
+    const idealOffset = this.calculateIdealOffset();
+    const idealLookat = this.calculateIdealLookat();
     // let t = 1.0;
     // t -= Math.pow(0.001, timeElapsed);
-    // // console.log(idealOffset, idealLookat);
+
+    // console.log(idealOffset, idealLookat);
     // this.currentPosition.lerp(idealOffset, t);
     // this.currentLookat.lerp(idealLookat, t);
-    // this.camera.position.copy(this.currentPosition);
-    // this.camera.lookAt(this.currentPosition);
+    this.camera.position.copy(idealOffset);
 
+    // console.log(this.camera.position);
+    this.camera.lookAt(idealLookat);
+    // console.log(idealLookat);
     // TODO decouple hardcoded third person camera controls
     // // {
     const cameraMatrix = new THREE.Matrix4()
-      //   // place camera in center of player ship
+      // place camera in center of player ship
       .multiply(
         new THREE.Matrix4().makeTranslation(
           this.target.planePosition.x,
@@ -56,7 +58,7 @@ export default class ThirdPersonShipCamera {
     this.camera.matrixAutoUpdate = false;
     this.camera.matrix.copy(cameraMatrix);
     this.camera.matrixWorldNeedsUpdate = true;
-    // }
-    // this.controls.update(); // for orbit controls not being used
   }
+  // this.controls.update(); // for orbit controls not being used
+  // }
 }

@@ -29,9 +29,10 @@ export default class BasicShipController {
   }
 
   get Position() {
-    return this.position;
+    return this.planePosition;
   }
   get Rotation() {
+    return this.rotMatrix;
     if (!this.target) {
       return new THREE.Quaternion();
     }
@@ -55,6 +56,9 @@ export default class BasicShipController {
     );
     this.target.matrixAutoUpdate = false;
     this.target.matrix.copy(this.matrix);
+    this.target.position.x = this.planePosition.x;
+    this.target.position.y = this.planePosition.y;
+    this.target.position.z = this.planePosition.z;
     this.target.matrixWorldNeedsUpdate = true;
   }
   updatePlaneAxis(x, y, z, planePosition) {
