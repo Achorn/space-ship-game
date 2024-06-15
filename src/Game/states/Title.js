@@ -4,6 +4,8 @@ import GameWorld from "./GameWorld";
 export default class Title extends GameState {
   constructor() {
     super();
+
+    // add stars to title
   }
 
   update(deltaTime) {

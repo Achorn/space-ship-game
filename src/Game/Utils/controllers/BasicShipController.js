@@ -79,9 +79,8 @@ export default class BasicShipController {
     if (Math.abs(this.speedModifier) > this.maxVelocity) {
       this.speedModifier = Math.sign(this.speedModifier) * this.maxVelocity;
     }
-    console.log(this.input.keys.rotateLeft);
+
     if (this.input.keys.forward) {
-      // ship speed modifier
       this.speedModifier += 0.0025;
     }
     if (this.input.keys.backward) {
@@ -89,14 +88,12 @@ export default class BasicShipController {
     }
 
     if (this.input.keys.rotateLeft) {
-      // ship barrel rolling
       this.jawVelocity += 0.0025;
     }
     if (this.input.keys.rotateRight) {
       this.jawVelocity -= 0.0025;
     }
 
-    // turn up and down
     if (this.input.keys.up) {
       this.pitchVelocity += 0.0025;
     }
@@ -104,7 +101,6 @@ export default class BasicShipController {
       this.pitchVelocity -= 0.0025;
     }
 
-    // turn left and right
     if (this.input.keys.left) {
       this.turnVelocity += 0.0025;
     }

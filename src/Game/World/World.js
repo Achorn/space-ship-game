@@ -16,7 +16,6 @@ export default class World {
     this.stars = new Stars();
     this.sphereBoundary = new BoundarySphere();
     this.ships = new Ships();
-    this.playerShip = new PlayerShip();
     // this.game.camera.instance,
     // this.playerShip.instance
     // );
