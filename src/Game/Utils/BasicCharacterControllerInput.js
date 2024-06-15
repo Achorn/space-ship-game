@@ -29,7 +29,7 @@ export default class BasicCharacterControllerInput {
       case 68: // d
         this.keys.right = true;
         break;
-      case 87: //  left arrow
+      case 37: //  left arrow
         this.keys.rotateLeft = true;
         break;
       case 39: //  right arrow
@@ -58,7 +58,7 @@ export default class BasicCharacterControllerInput {
       case 68: // d
         this.keys.right = false;
         break;
-      case 87: //  left arrow
+      case 37: //  left arrow
         this.keys.rotateLeft = false;
         break;
       case 39: //  right arrow

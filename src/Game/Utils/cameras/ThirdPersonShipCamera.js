@@ -18,7 +18,6 @@ export default class ThirdPersonShipCamera {
   }
   calculateIdealLookat() {
     const idealLookat = new THREE.Vector3(10, 10, 50);
-    console.log(this.target.Rotation);
     idealLookat.applyQuaternion(this.target.Rotation);
 
     return idealLookat.add(this.target.Position);
@@ -52,9 +51,9 @@ export default class ThirdPersonShipCamera {
       // player rotation matrix
       .multiply(this.target.rotMatrix)
       // angle camera down a little
-      .multiply(new THREE.Matrix4().makeRotationX(-0.2))
+      .multiply(new THREE.Matrix4().makeRotationX(-0.1))
       // pull camera behind player target
-      .multiply(new THREE.Matrix4().makeTranslation(0, 0.1, 3));
+      .multiply(new THREE.Matrix4().makeTranslation(0, 0.5, 3));
     this.camera.matrixAutoUpdate = false;
     this.camera.matrix.copy(cameraMatrix);
     this.camera.matrixWorldNeedsUpdate = true;

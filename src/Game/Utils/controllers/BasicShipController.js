@@ -79,36 +79,36 @@ export default class BasicShipController {
     if (Math.abs(this.speedModifier) > this.maxVelocity) {
       this.speedModifier = Math.sign(this.speedModifier) * this.maxVelocity;
     }
-
-    if (this.game.userInput.controls["arrowup"]) {
+    console.log(this.input.keys.rotateLeft);
+    if (this.input.keys.forward) {
       // ship speed modifier
       this.speedModifier += 0.0025;
     }
-    if (this.game.userInput.controls["arrowdown"]) {
+    if (this.input.keys.backward) {
       this.speedModifier -= 0.0025;
     }
 
-    if (this.game.userInput.controls["arrowleft"]) {
+    if (this.input.keys.rotateLeft) {
       // ship barrel rolling
       this.jawVelocity += 0.0025;
     }
-    if (this.game.userInput.controls["arrowright"]) {
+    if (this.input.keys.rotateRight) {
       this.jawVelocity -= 0.0025;
     }
 
     // turn up and down
-    if (this.game.userInput.controls["s"]) {
+    if (this.input.keys.up) {
       this.pitchVelocity += 0.0025;
     }
-    if (this.game.userInput.controls["w"]) {
+    if (this.input.keys.down) {
       this.pitchVelocity -= 0.0025;
     }
 
     // turn left and right
-    if (this.game.userInput.controls["a"]) {
+    if (this.input.keys.left) {
       this.turnVelocity += 0.0025;
     }
-    if (this.game.userInput.controls["d"]) {
+    if (this.input.keys.right) {
       this.turnVelocity -= 0.0025;
     }
 
