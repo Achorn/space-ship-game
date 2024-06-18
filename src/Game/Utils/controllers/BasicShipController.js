@@ -3,7 +3,8 @@ import BasicCharacterControllerInput from "../BasicCharacterControllerInput";
 import Game from "../../Game";
 
 export default class BasicShipController {
-  constructor(target) {
+  constructor(target, gameWorld) {
+    this.gameWorld = gameWorld;
     this.game = new Game();
     this.position = new THREE.Vector3();
     this.input = new BasicCharacterControllerInput();
@@ -42,16 +43,35 @@ export default class BasicShipController {
   update() {
     // is shooting!!!
     if (this.input.keys.shoot) {
+      // Create bullet
       var bullet = new THREE.Mesh(
-        new THREE.SphereGeometry(0.5, 8, 8),
+        new THREE.SphereGeometry(0.1, 8, 8),
         new THREE.MeshBasicMaterial({ color: 0xffffff })
       );
+
+      // Position bullet
+      bullet.position.copy(this.planePosition);
+
       bullet.alive = true;
+
       setTimeout(() => {
         bullet.alive = false;
         this.game.scene.remove(bullet);
       }, 1000);
       this.game.scene.add(bullet);
+
+      //get direction
+
+      console.log("z", this.z);
+
+      let direction = new THREE.Vector3(
+        -1 * this.z.x,
+        -1 * this.z.y,
+        -1 * this.z.z
+      );
+      bullet.direction = direction;
+      // console.log(this.gameWorld.bullets);
+      this.gameWorld.bullets.push(bullet);
     }
 
     this.updatePlaneAxis(this.x, this.y, this.z, this.planePosition);

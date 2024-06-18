@@ -12,16 +12,28 @@ export default class GameWorld extends GameState {
     this.playerShip = new PlayerShip();
     this.game.camera.ship = this.playerShip;
 
-    this.controls = new BasicShipController(this.playerShip.instance);
+    this.bullets = [];
+    this.bulletSpeedFactor = 1;
+    this.controls = new BasicShipController(this.playerShip.instance, this);
     this.thirdPersonCamera = new ThirdPersonShipCamera(
       this.game.camera.instance,
       this.controls
     );
-
-    this.bullets = [];
   }
 
   update(deltaTime) {
+    for (var i = 0; i < this.bullets.length; i++) {
+      if (this.bullets[i] === undefined) continue;
+      if (this.bullets[i].alive === false) {
+        this.bullets.splice(i, 1);
+        continue;
+      }
+
+      this.bullets[i].position.add(
+        this.bullets[i].direction.multiplyScalar(this.bulletSpeedFactor)
+      );
+    }
+
     if (this.game.userInput.controls["p"] == true) {
       let newState = new PauseMenu();
       newState.enterState();
@@ -59,25 +71,6 @@ export default class GameWorld extends GameState {
   cleanUp() {
     super.cleanUp();
     // delete all threejs objects made from world map
-
-    //Traverse entire scene (maybe traverse world group in future)
-    // this.game.scene.traverse((child) => {
-    //   //dispose mesh
-    //   //dispose geometry
-    //   if (child instanceof THREE.Mesh) {
-    //     console.log(child);
-    //     child.geometry.dispose();
-
-    //     for (const key in child.material) {
-    //       console.log(key);
-    //       const value = child.material[key];
-    //       if (value && typeof value.dispose === "function") {
-    //         value.dispose();
-    //       }
-    //     }
-    //   }
-    // });
-    // r
 
     // remove single player ship
 
