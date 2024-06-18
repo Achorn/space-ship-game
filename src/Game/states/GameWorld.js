@@ -1,23 +1,34 @@
 import World from "../World/World";
 import GameState from "./GameState";
 import PauseMenu from "./PauseMenu";
-import * as THREE from "three";
+import BasicShipController from "../Utils/controllers/BasicShipController";
+import ThirdPersonShipCamera from "../Utils/cameras/ThirdPersonShipCamera";
+import PlayerShip from "../World/PlayerShip";
 
 export default class GameWorld extends GameState {
   constructor() {
     super();
     this.world = new World();
-    this.game.camera.ship = this.world.playerShip;
+    this.playerShip = new PlayerShip();
+    this.game.camera.ship = this.playerShip;
+
+    this.controls = new BasicShipController(this.playerShip.instance);
+    this.thirdPersonCamera = new ThirdPersonShipCamera(
+      this.game.camera.instance,
+      this.controls
+    );
   }
 
-  update(deltaTime, actions) {
-    if (actions["p"] == true) {
+  update(deltaTime) {
+    if (this.game.userInput.controls["p"] == true) {
       let newState = new PauseMenu();
       newState.enterState();
       this.game.userInput.resetKeys();
     }
     this.game.camera.update();
-    this.world.update();
+    this.world.update(deltaTime);
+    this.controls.update(deltaTime);
+    this.thirdPersonCamera.update(deltaTime);
   }
 
   render(context) {
@@ -68,9 +79,9 @@ export default class GameWorld extends GameState {
 
     // remove single player ship
 
-    this.game.scene.remove(this.world.playerShip.instance);
-    this.world.playerShip.geometry.dispose();
-    this.world.playerShip.material.dispose();
+    this.game.scene.remove(this.playerShip.instance);
+    this.playerShip.geometry.dispose();
+    this.playerShip.material.dispose();
 
     //remove all ships,
     this.world.ships.cleanUp();

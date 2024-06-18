@@ -4,11 +4,13 @@ import GameWorld from "./GameWorld";
 export default class Title extends GameState {
   constructor() {
     super();
+
+    // add stars to title
   }
 
-  update(deltaTime, actions) {
+  update(deltaTime) {
     // press any button to enter new state
-    if (actions["enter"] == true) {
+    if (this.game.userInput.controls["enter"] == true) {
       let newState = new GameWorld(this.game);
       newState.enterState();
     }

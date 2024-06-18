@@ -6,7 +6,7 @@ export default class GameState {
     this.prevState = null;
   }
 
-  update(deltaTime, actions) {}
+  update(deltaTime) {}
 
   render(context) {}
 

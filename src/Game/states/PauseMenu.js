@@ -4,7 +4,9 @@ export default class PauseMenu extends GameState {
   constructor() {
     super();
   }
-  update(deltaTime, actions) {
+  update(deltaTime) {
+    let actions = this.game.userInput.controls;
+
     if (actions["p"] == true) {
       this.exitState();
     }

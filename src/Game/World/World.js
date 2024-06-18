@@ -16,10 +16,13 @@ export default class World {
     this.stars = new Stars();
     this.sphereBoundary = new BoundarySphere();
     this.ships = new Ships();
-    this.playerShip = new PlayerShip();
+    // this.game.camera.instance,
+    // this.playerShip.instance
+    // );
     this.environment = new Environment();
   }
-  update() {
-    this.playerShip.update();
+  update(elapsedTime) {
+    // this.playerShip.update();
+    // this.thirPersonCamera.update(elapsedTime);
   }
 }
