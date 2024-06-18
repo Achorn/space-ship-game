@@ -10,6 +10,7 @@ export default class BasicCharacterControllerInput {
       down: false,
       up: false,
       start: false,
+      shoot: false,
     };
     document.addEventListener("keydown", (e) => this.onKeyDown(e), false);
     document.addEventListener("keyup", (e) => this.onKeyUp(e), false);
@@ -41,6 +42,9 @@ export default class BasicCharacterControllerInput {
       case 40: //  down arrow
         this.keys.backward = true;
         break;
+      case 32: //  space
+        this.keys.shoot = true;
+        break;
     }
   }
 
@@ -69,6 +73,9 @@ export default class BasicCharacterControllerInput {
         break;
       case 40: //  down arrow
         this.keys.backward = false;
+        break;
+      case 32: //  space
+        this.keys.shoot = false;
         break;
     }
   }

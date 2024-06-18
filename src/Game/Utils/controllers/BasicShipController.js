@@ -33,13 +33,27 @@ export default class BasicShipController {
   }
   get Rotation() {
     return this.rotMatrix;
-    if (!this.target) {
-      return new THREE.Quaternion();
-    }
-    return this.target.quaternion;
+    // if (!this.target) {
+    //   return new THREE.Quaternion();
+    // }
+    // return this.target.quaternion;
   }
 
   update() {
+    // is shooting!!!
+    if (this.input.keys.shoot) {
+      var bullet = new THREE.Mesh(
+        new THREE.SphereGeometry(0.5, 8, 8),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+      );
+      bullet.alive = true;
+      setTimeout(() => {
+        bullet.alive = false;
+        this.game.scene.remove(bullet);
+      }, 1000);
+      this.game.scene.add(bullet);
+    }
+
     this.updatePlaneAxis(this.x, this.y, this.z, this.planePosition);
     this.rotMatrix = new THREE.Matrix4().makeBasis(this.x, this.y, this.z);
 

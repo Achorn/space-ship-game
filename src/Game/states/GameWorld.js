@@ -17,6 +17,8 @@ export default class GameWorld extends GameState {
       this.game.camera.instance,
       this.controls
     );
+
+    this.bullets = [];
   }
 
   update(deltaTime) {
