@@ -44,7 +44,6 @@ export default class BasicShipController {
   }
 
   update(deltaTime) {
-    console.log(this.canShoot);
     // is shooting!!!
     if (this.input.keys.shoot && this.canShoot <= 0) {
       this.canShoot = 200;
@@ -62,6 +61,8 @@ export default class BasicShipController {
       setTimeout(() => {
         bullet.alive = false;
         this.game.scene.remove(bullet);
+        bullet.geometry.dispose();
+        bullet.material.dispose();
       }, 1000);
       this.game.scene.add(bullet);
 
@@ -73,7 +74,6 @@ export default class BasicShipController {
         -1 * this.z.z
       );
       bullet.direction = direction;
-      // console.log(this.gameWorld.bullets);
       this.gameWorld.bullets.push(bullet);
     }
     this.canShoot -= deltaTime;
