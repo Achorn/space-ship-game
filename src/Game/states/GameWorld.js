@@ -13,7 +13,7 @@ export default class GameWorld extends GameState {
     this.game.camera.ship = this.playerShip;
 
     this.bullets = [];
-    this.bulletSpeedFactor = 1;
+    this.bulletSpeedFactor = 1.4;
     this.controls = new BasicShipController(this.playerShip.instance, this);
     this.thirdPersonCamera = new ThirdPersonShipCamera(
       this.game.camera.instance,

@@ -27,6 +27,9 @@ export default class BasicShipController {
 
     this.planeSpeed = 0.03;
     this.speedModifier = 0.03;
+
+    //guns variables
+    this.canShoot = 0;
   }
 
   get Position() {
@@ -40,12 +43,14 @@ export default class BasicShipController {
     // return this.target.quaternion;
   }
 
-  update() {
+  update(deltaTime) {
+    console.log(this.canShoot);
     // is shooting!!!
-    if (this.input.keys.shoot) {
+    if (this.input.keys.shoot && this.canShoot <= 0) {
+      this.canShoot = 200;
       // Create bullet
       var bullet = new THREE.Mesh(
-        new THREE.SphereGeometry(0.1, 8, 8),
+        new THREE.SphereGeometry(0.05, 8, 8),
         new THREE.MeshBasicMaterial({ color: 0xffffff })
       );
 
@@ -62,8 +67,6 @@ export default class BasicShipController {
 
       //get direction
 
-      console.log("z", this.z);
-
       let direction = new THREE.Vector3(
         -1 * this.z.x,
         -1 * this.z.y,
@@ -73,6 +76,7 @@ export default class BasicShipController {
       // console.log(this.gameWorld.bullets);
       this.gameWorld.bullets.push(bullet);
     }
+    this.canShoot -= deltaTime;
 
     this.updatePlaneAxis(this.x, this.y, this.z, this.planePosition);
     this.rotMatrix = new THREE.Matrix4().makeBasis(this.x, this.y, this.z);
@@ -114,6 +118,8 @@ export default class BasicShipController {
       this.speedModifier = Math.sign(this.speedModifier) * this.maxVelocity;
     }
 
+    var adjustment = 0.001;
+
     if (this.input.keys.forward) {
       this.speedModifier += 0.0025;
     }
@@ -129,17 +135,17 @@ export default class BasicShipController {
     }
 
     if (this.input.keys.up) {
-      this.pitchVelocity += 0.0025;
+      this.pitchVelocity += adjustment;
     }
     if (this.input.keys.down) {
-      this.pitchVelocity -= 0.0025;
+      this.pitchVelocity -= adjustment;
     }
 
     if (this.input.keys.left) {
-      this.turnVelocity += 0.0025;
+      this.turnVelocity += adjustment;
     }
     if (this.input.keys.right) {
-      this.turnVelocity -= 0.0025;
+      this.turnVelocity -= adjustment;
     }
 
     x.applyAxisAngle(y, this.turnVelocity);
