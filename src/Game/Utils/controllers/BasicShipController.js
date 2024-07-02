@@ -3,7 +3,8 @@ import BasicCharacterControllerInput from "../BasicCharacterControllerInput";
 import Game from "../../Game";
 
 export default class BasicShipController {
-  constructor(target) {
+  constructor(target, gameWorld) {
+    this.gameWorld = gameWorld;
     this.game = new Game();
     this.position = new THREE.Vector3();
     this.input = new BasicCharacterControllerInput();
@@ -26,6 +27,9 @@ export default class BasicShipController {
 
     this.planeSpeed = 0.03;
     this.speedModifier = 0.03;
+
+    //guns variables
+    this.canShoot = 0;
   }
 
   get Position() {
@@ -33,13 +37,47 @@ export default class BasicShipController {
   }
   get Rotation() {
     return this.rotMatrix;
-    if (!this.target) {
-      return new THREE.Quaternion();
-    }
-    return this.target.quaternion;
+    // if (!this.target) {
+    //   return new THREE.Quaternion();
+    // }
+    // return this.target.quaternion;
   }
 
-  update() {
+  update(deltaTime) {
+    // is shooting!!!
+    if (this.input.keys.shoot && this.canShoot <= 0) {
+      this.canShoot = 200;
+      // Create bullet
+      var bullet = new THREE.Mesh(
+        new THREE.SphereGeometry(0.05, 8, 8),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+      );
+
+      // Position bullet
+      bullet.position.copy(this.planePosition);
+
+      bullet.alive = true;
+
+      setTimeout(() => {
+        bullet.alive = false;
+        this.game.scene.remove(bullet);
+        bullet.geometry.dispose();
+        bullet.material.dispose();
+      }, 1000);
+      this.game.scene.add(bullet);
+
+      //get direction
+
+      let direction = new THREE.Vector3(
+        -1 * this.z.x,
+        -1 * this.z.y,
+        -1 * this.z.z
+      );
+      bullet.direction = direction;
+      this.gameWorld.bullets.push(bullet);
+    }
+    this.canShoot -= deltaTime;
+
     this.updatePlaneAxis(this.x, this.y, this.z, this.planePosition);
     this.rotMatrix = new THREE.Matrix4().makeBasis(this.x, this.y, this.z);
 
@@ -80,6 +118,8 @@ export default class BasicShipController {
       this.speedModifier = Math.sign(this.speedModifier) * this.maxVelocity;
     }
 
+    var adjustment = 0.001;
+
     if (this.input.keys.forward) {
       this.speedModifier += 0.0025;
     }
@@ -95,17 +135,17 @@ export default class BasicShipController {
     }
 
     if (this.input.keys.up) {
-      this.pitchVelocity += 0.0025;
+      this.pitchVelocity += adjustment;
     }
     if (this.input.keys.down) {
-      this.pitchVelocity -= 0.0025;
+      this.pitchVelocity -= adjustment;
     }
 
     if (this.input.keys.left) {
-      this.turnVelocity += 0.0025;
+      this.turnVelocity += adjustment;
     }
     if (this.input.keys.right) {
-      this.turnVelocity -= 0.0025;
+      this.turnVelocity -= adjustment;
     }
 
     x.applyAxisAngle(y, this.turnVelocity);
