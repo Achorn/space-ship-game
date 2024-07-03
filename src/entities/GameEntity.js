@@ -14,7 +14,7 @@ class GameEntity {
 
   // methods
   load = async () => {};
-  update = (deltaT) => {};
+  update = (deltaTime) => {};
   dispose = () => {};
 }
 

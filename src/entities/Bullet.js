@@ -4,8 +4,9 @@ class Bullet extends GameEntity {
   constructor(position, angle) {
     super(position, "bullet");
     this.angle = angle;
-
     this.load();
+    this.speed = 0.06;
+    this.existance = 0;
   }
 
   load = () => {
@@ -15,7 +16,11 @@ class Bullet extends GameEntity {
     );
     this.mesh.position.copy(this.position);
   };
-  update = () => {};
+  update = (deltaTime) => {
+    this.existance += deltaTime;
+    this.mesh.position.add(this.angle.multiplyScalar(this.speed * deltaTime));
+    if (this.existance > 800) this.shouldDispose = true;
+  };
 
   dispose = () => {
     this.mesh.material.dispose();

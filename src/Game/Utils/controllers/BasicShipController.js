@@ -50,40 +50,14 @@ export default class BasicShipController {
       this.canShoot = 200;
       // Create bullet
 
-      //TODO create new bullet class and add that to game
-      var bullet = new THREE.Mesh(
-        new THREE.SphereGeometry(0.05, 8, 8),
-        new THREE.MeshBasicMaterial({ color: 0xff00ff })
-      );
-
-      // Position bullet
-      bullet.position.copy(this.planePosition);
-
-      bullet.alive = true;
-
-      setTimeout(() => {
-        bullet.alive = false;
-        this.game.scene.remove(bullet);
-        bullet.geometry.dispose();
-        bullet.material.dispose();
-      }, 1000);
-      this.game.scene.add(bullet);
-
-      //get direction
-
       let direction = new THREE.Vector3(
         -1 * this.z.x,
         -1 * this.z.y,
         -1 * this.z.z
       );
-      bullet.direction = direction;
-      this.gameScene.bullets.push(bullet);
 
-      // create bullet class
       let bulletEntity = new Bullet(this.planePosition, direction);
       this.gameScene.addToScene(bulletEntity);
-      // add to game scene game entities
-      // thats it...
     }
     this.canShoot -= deltaTime;
 
