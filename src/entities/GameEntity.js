@@ -1,7 +1,9 @@
-const { Vector3, Mesh } = require("three");
+import { Mesh } from "three";
+import Game from "../Game/Game";
 
 class GameEntity {
   constructor(position, entityType) {
+    this.game = new Game(); // access to entire game...
     this.position = position;
     this.mesh = new Mesh();
     this.collider;
@@ -13,7 +15,6 @@ class GameEntity {
   // methods
   load = async () => {};
   update = (deltaT) => {};
-
   dispose = () => {};
 }
 

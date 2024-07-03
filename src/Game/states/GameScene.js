@@ -5,15 +5,20 @@ import BasicShipController from "../Utils/controllers/BasicShipController";
 import ThirdPersonShipCamera from "../Utils/cameras/ThirdPersonShipCamera";
 import PlayerShip from "../World/PlayerShip";
 
-export default class GameWorld extends GameState {
+export default class GameScene extends GameState {
   constructor() {
     super();
+
     this.world = new World();
     this.playerShip = new PlayerShip();
     this.game.camera.ship = this.playerShip;
 
     this.bullets = [];
     this.bulletSpeedFactor = 1.4;
+
+    this.gameEntities = [];
+    this.gameEntities.push(this.playerShip);
+
     this.controls = new BasicShipController(this.playerShip.instance, this);
     this.thirdPersonCamera = new ThirdPersonShipCamera(
       this.game.camera.instance,
@@ -22,6 +27,17 @@ export default class GameWorld extends GameState {
   }
 
   update(deltaTime) {
+    //check for state change
+    if (this.game.userInput.controls["p"] == true) {
+      let newState = new PauseMenu();
+      newState.enterState();
+      this.game.userInput.resetKeys();
+    }
+
+    this.gameEntities.forEach((entity) => {
+      entity.update(deltaTime);
+    });
+
     for (var i = 0; i < this.bullets.length; i++) {
       if (this.bullets[i] === undefined) continue;
       if (this.bullets[i].alive === false) {
@@ -34,16 +50,30 @@ export default class GameWorld extends GameState {
       );
     }
 
-    if (this.game.userInput.controls["p"] == true) {
-      let newState = new PauseMenu();
-      newState.enterState();
-      this.game.userInput.resetKeys();
-    }
     this.game.camera.update();
     this.world.update(deltaTime);
     this.controls.update(deltaTime);
     this.thirdPersonCamera.update(deltaTime);
   }
+  addToScene = (entity) => {
+    this.gameEntities.push(entity);
+    this.game.scene.add(entity.mesh);
+  };
+
+  disposeEntities = () => {
+    const toBeDisposed = this.gameEntities.filter(
+      (entity) => entity.shouldDispose
+    );
+
+    toBeDisposed.forEach((entity) => {
+      this.game.scene.remove(entity.mesh);
+      entity.dispose();
+    });
+
+    this.gameEntities = [
+      ...this.gameEntities.filter((entity) => !entity.shouldDispose),
+    ];
+  };
 
   render(context) {
     // Draw blue triangle
@@ -71,7 +101,10 @@ export default class GameWorld extends GameState {
   cleanUp() {
     super.cleanUp();
     // delete all threejs objects made from world map
-
+    this.gameEntities.forEach((entity) => {
+      this.game.scene.remove(entity.mesh);
+      entity.dispose();
+    });
     // remove single player ship
 
     this.game.scene.remove(this.playerShip.instance);
