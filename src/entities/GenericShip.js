@@ -11,6 +11,9 @@ class GenericShip extends GameEntity {
       new THREE.MeshStandardMaterial({ color: color })
     );
     this.mesh.position.copy(position);
+
+    const collider = new THREE.Box3().setFromObject(this.mesh);
+    this.collider = collider;
   }
 
   update = (deltaTime) => {

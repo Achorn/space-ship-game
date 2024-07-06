@@ -1,3 +1,4 @@
+import ExplosionEffect from "../effects/ExplosionEffect";
 import GameEntity from "./GameEntity";
 import * as THREE from "three";
 class Bullet extends GameEntity {
@@ -34,14 +35,11 @@ class Bullet extends GameEntity {
 
     //if collision detected. its no longer needed and should be removed
     if (colliders.length) {
-      this._shouldDispose = true;
-      console.log("collided!!!");
+      this.shouldDispose = true;
 
       // explode!!!
-      // const explosion = new ExplosionEffect(this._mesh.position, 1);
-      // explosion.load().then(() => {
-      //   this.gameScene.addToScene(explosion);
-      // });
+      const explosion = new ExplosionEffect(this.mesh.position, 0.5);
+      this.gameScene.addToScene(explosion);
 
       //collide with enemy?
       // const enemies = colliders.filter((c) => c.entityType === "enemy");
