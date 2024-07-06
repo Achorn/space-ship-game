@@ -56,7 +56,11 @@ export default class BasicShipController {
         -1 * this.z.z
       );
 
-      let bulletEntity = new Bullet(this.planePosition, direction);
+      let bulletEntity = new Bullet(
+        this.planePosition,
+        direction,
+        this.gameScene
+      );
       this.gameScene.addToScene(bulletEntity);
     }
     this.canShoot -= deltaTime;

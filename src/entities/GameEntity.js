@@ -13,7 +13,7 @@ class GameEntity {
   }
 
   // methods
-  load = async () => {};
+  load = () => {};
   update = (deltaTime) => {};
   dispose = () => {};
 }

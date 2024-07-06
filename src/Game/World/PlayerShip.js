@@ -4,7 +4,7 @@ import * as THREE from "three";
 
 class PlayerShip extends GameEntity {
   constructor() {
-    super(new THREE.Vector3(0, 0, 0), "ship");
+    super(new THREE.Vector3(0, 0, 0), "player");
     this.scene = this.game.scene;
 
     // variables

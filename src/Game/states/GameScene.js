@@ -9,14 +9,14 @@ export default class GameScene extends GameState {
   constructor() {
     super();
 
-    this.world = new World();
+    this.gameEntities = [];
+    this.world = new World(this);
     this.playerShip = new PlayerShip();
     this.game.camera.ship = this.playerShip;
 
     this.bullets = [];
     this.bulletSpeedFactor = 1.4;
 
-    this.gameEntities = [];
     this.gameEntities.push(this.playerShip);
 
     this.controls = new BasicShipController(this.playerShip.instance, this);

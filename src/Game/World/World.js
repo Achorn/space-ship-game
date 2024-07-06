@@ -1,13 +1,12 @@
 import Game from "../Game";
 import Environment from "./Environment";
-import * as THREE from "three";
 import Stars from "./Stars";
 import BoundarySphere from "./BoundarySphere";
 import Ships from "./Ships";
-import PlayerShip from "./PlayerShip";
 
 export default class World {
-  constructor() {
+  constructor(gameScene) {
+    this.gameScene = gameScene;
     this.game = new Game();
     this.scene = this.game.scene;
 
@@ -15,7 +14,7 @@ export default class World {
 
     this.stars = new Stars();
     this.sphereBoundary = new BoundarySphere();
-    this.ships = new Ships();
+    this.ships = new Ships(gameScene);
     // this.game.camera.instance,
     // this.playerShip.instance
     // );
