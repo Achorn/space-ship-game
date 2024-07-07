@@ -12,6 +12,7 @@ export default class BoundarySphere {
       new THREE.MeshBasicMaterial({
         wireframe: true,
         color: "black",
+        // color: "blue",
       })
     );
     this.scene.add(this.instance);

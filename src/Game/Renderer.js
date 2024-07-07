@@ -19,6 +19,7 @@ export default class Renderer {
     });
     this.instance.setSize(this.sizes.width, this.sizes.height);
     this.instance.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.instance.setClearColor("#1b1a25");
 
     //2d canvas
     this.canvas2d.width = this.sizes.width;
