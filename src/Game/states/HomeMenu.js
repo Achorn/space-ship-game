@@ -24,9 +24,6 @@ class HomeMenu extends GameState {
   update(deltaTime) {
     this.menu.update(this.game.userInput.controls);
 
-    // if (this.game.userInput.controls["e"] == true) {
-    // }
-
     this.game.userInput.resetKeys();
   }
   render(context) {
