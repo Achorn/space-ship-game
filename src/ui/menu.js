@@ -58,7 +58,7 @@ class Menu {
       this.ctx.fill();
 
       this.ctx.closePath();
-      this.ctx.beginPath();
+      // this.ctx.beginPath();
       this.ctx.font = "48px serif";
       this.ctx.textAlign = "center";
       this.ctx.textBaseline = "middle";
@@ -69,7 +69,7 @@ class Menu {
         brickY + this.brickHeight / 2
       );
 
-      this.ctx.closePath();
+      // this.ctx.closePath();
     }
   };
 }
