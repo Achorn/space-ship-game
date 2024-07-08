@@ -5,7 +5,7 @@ import { randomIntInRange, randomSin } from "../utils/MathUtils";
 class ExplosionEffect extends GameEntity {
   constructor(position, size) {
     super(position, "general");
-    this.size = size;
+    this.size = size * 1.5;
     this.effectDuration = 0.4;
     this.currentDuration = this.effectDuration;
     this.fireMesh = new THREE.Mesh();
