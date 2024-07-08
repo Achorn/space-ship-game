@@ -4,9 +4,9 @@ import Sizes from "./Utils/Sizes";
 import Time from "./Utils/Time";
 import Camera from "./Camera";
 import Renderer from "./Renderer";
+import World from "./World/World";
 import UserInput from "./UserInput";
 import Title from "./states/Title";
-import HomeMenu from "./states/HomeMenu";
 
 let instance = null;
 
@@ -42,7 +42,6 @@ export default class Game {
 
   loadStates() {
     this.titleScreen = new Title();
-    // this.titleScreen = new HomeMenu();
     this.stateStack.push(this.titleScreen);
   }
 
