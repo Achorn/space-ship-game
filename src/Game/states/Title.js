@@ -1,13 +1,9 @@
 import GameState from "./GameState";
-import GameScene from "./GameScene";
-import Menu from "../../ui/menu";
 import HomeMenu from "./HomeMenu";
 
 export default class Title extends GameState {
   constructor() {
     super();
-    this.menu = new Menu();
-    // add stars to title
   }
 
   update(deltaTime) {
