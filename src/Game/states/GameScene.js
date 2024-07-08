@@ -78,15 +78,14 @@ export default class GameScene extends GameState {
 
   render(context) {
     // Draw blue triangle
-    context.reset();
     context.beginPath();
     context.fillStyle = "blue";
     context.moveTo(20, 20);
     context.lineTo(180, 20);
     context.lineTo(130, 130);
     context.closePath();
-
     context.fill();
+
     context.font = "48px serif";
     context.fillStyle = "green";
     context.fillText("FUN GAMEPLAY", 50, 100);
