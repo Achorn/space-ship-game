@@ -77,8 +77,6 @@ export default class GameScene extends GameState {
   };
 
   render(context) {
-    // Draw blue triangle
-    context.reset();
     context.beginPath();
     context.fillStyle = "blue";
     context.moveTo(20, 20);

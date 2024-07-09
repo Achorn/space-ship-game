@@ -1,3 +1,4 @@
+import GameScene from "./GameScene";
 import GameState from "./GameState";
 import HomeMenu from "./HomeMenu";
 
