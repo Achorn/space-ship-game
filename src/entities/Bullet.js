@@ -38,7 +38,7 @@ class Bullet extends GameEntity {
       this.shouldDispose = true;
 
       // explode!!!
-      const explosion = new ExplosionEffect(this.mesh.position, 0.5);
+      const explosion = new ExplosionEffect(this.mesh.position, 1);
       this.gameScene.addToScene(explosion);
 
       //collide with enemy?
