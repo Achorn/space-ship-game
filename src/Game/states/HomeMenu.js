@@ -1,6 +1,7 @@
 import GameState from "./GameState";
 import GameScene from "./GameScene";
 import Menu from "../../ui/menu";
+import OptionsMenu from "./OptionsMenu";
 
 class HomeMenu extends GameState {
   constructor() {
@@ -10,7 +11,7 @@ class HomeMenu extends GameState {
         name: "play",
         action: () => new GameScene().enterState(),
       },
-      { name: "options", action: () => {} },
+      { name: "options", action: () => new OptionsMenu().enterState() },
       {
         name: "quit",
         action: () => {
