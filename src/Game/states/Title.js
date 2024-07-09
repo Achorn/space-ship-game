@@ -1,5 +1,6 @@
 import GameState from "./GameState";
 import GameScene from "./GameScene";
+import HomeMenu from "./HomeMenu";
 
 export default class Title extends GameState {
   constructor() {
@@ -11,7 +12,7 @@ export default class Title extends GameState {
   update(deltaTime) {
     // press any button to enter new state
     if (this.game.userInput.controls["enter"] == true) {
-      let newState = new GameScene(this.game);
+      let newState = new HomeMenu();
       newState.enterState();
     }
     // this.game.camera.update();
