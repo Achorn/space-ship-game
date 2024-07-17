@@ -1,23 +1,19 @@
 import Menu from "../../ui/menu";
 import GameState from "./GameState";
-import OptionsMenu from "./OptionsMenu";
 
-export default class PauseMenu extends GameState {
+class OptionsMenu extends GameState {
   constructor() {
     super();
     this.buttons = [
       {
-        name: "continue",
-        action: () =>
-          this.game.stateStack[this.game.stateStack.length - 1].exitState(),
+        name: "Sound: ON",
+        action: () => {},
       },
-      { name: "options", action: () => new OptionsMenu().enterState() },
+      { name: "music: ON", action: () => {} },
       {
-        name: "quit",
+        name: "back",
         action: () => {
-          while (this.game.stateStack.length > 1) {
-            this.game.stateStack[this.game.stateStack.length - 1].exitState();
-          }
+          this.game.stateStack[this.game.stateStack.length - 1].exitState();
         },
       },
     ];
@@ -60,3 +56,5 @@ export default class PauseMenu extends GameState {
     // context.fillText("press 'Q' to quit", 100, 200);
   }
 }
+
+export default OptionsMenu;
