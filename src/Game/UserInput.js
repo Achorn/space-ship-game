@@ -1,16 +1,19 @@
+import Game from "./Game";
+
 export default class UserInput {
   constructor() {
+    this.game = new Game();
     this.controls = {};
     this.setListeners();
     this.controllerIndex = null;
-    this.gamepad = null;
+    this.previousGamepadButtons = null;
   }
 
   setListeners() {
     //set up gamepad connections
     window.addEventListener("gamepadconnected", (e) => {
       this.controllerIndex = e.gamepad.index;
-      this.gamepad = navigator.getGamepads()[0];
+      this.previousGamepadButtons = {};
     });
 
     window.addEventListener("gamepaddisconnected", (e) => {
@@ -19,7 +22,7 @@ export default class UserInput {
 
     //setup keyboard clicky clacky
     document.addEventListener("keydown", (e) => {
-      if (this.controllerIndex) return;
+      // if (this.controllerIndex) return;
       switch (e.key) {
         case "ArrowUp":
           this.controls.rightAnalogUp = true;
@@ -60,7 +63,7 @@ export default class UserInput {
       }
     });
     document.addEventListener("keyup", (e) => {
-      if (this.controllerIndex) return;
+      // if (this.controllerIndex) return;
 
       switch (e.key) {
         case "ArrowUp":
@@ -191,8 +194,9 @@ export default class UserInput {
     let newGamepad = navigator.getGamepads()[0];
     if (!newGamepad) return;
     newGamepad.buttons.forEach((button, index) => {
-      const oldButtonPressed = this.gamepad?.buttons[index].pressed;
+      const oldButtonPressed = this.previousGamepadButtons[index];
       if (button.pressed !== oldButtonPressed) {
+        //something is different!!!
         if (button.pressed && !oldButtonPressed) {
           document.dispatchEvent(
             new CustomEvent("gamepadButtonDown", {
@@ -208,13 +212,19 @@ export default class UserInput {
           );
         }
       }
+
+      //only google chrome creates snapshot of gamepad.
+      //any copying would be a reference rather than a previous gamepad state
+      // we need to create our own reference to previous gamepad state
+      this.previousGamepadButtons[index] = button.pressed;
     });
-    this.gamepad = newGamepad;
   }
   gamepadControllerInput() {
     if (this.controllerIndex == null) return;
 
-    const gamepad = navigator.getGamepads()[this.controllerIndex];
+    const gamepad = navigator.getGamepads()[0];
+    if (!gamepad) return;
+
     const buttons = gamepad.buttons;
 
     // ABXY BUTTONS
@@ -234,14 +244,14 @@ export default class UserInput {
     this.controls.leftAnalogDown = gamepad.axes[1] > 0.7;
     this.controls.leftAnalogLeft = gamepad.axes[0] < -0.7;
     this.controls.leftAnalogRight = gamepad.axes[0] > 0.7;
-    this.controls.leftAnalogClick = buttons[10].pressed;
+    // this.controls.leftAnalogClick = buttons[10].pressed;
 
     //Right Analog
     this.controls.rightAnalogUp = gamepad.axes[3] < -0.7;
     this.controls.rightAnalogDown = gamepad.axes[3] > 0.7;
     this.controls.rightAnalogLeft = gamepad.axes[2] < -0.7;
     this.controls.rightAnalogRight = gamepad.axes[2] > 0.7;
-    this.controls.rightAnalogClick = buttons[11].pressed;
+    // this.controls.rightAnalogClick = buttons[11].pressed;
 
     //Trigger buttons
     // this.controls.leftBumper = buttons[4].pressed;

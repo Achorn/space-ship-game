@@ -31,6 +31,8 @@ export default class Game {
     this.stateStack = [];
     this.loadStates();
 
+    this.debugStatement = "debug";
+
     // Sizes resize event
     this.sizes.on("resize", () => {
       this.resize();
