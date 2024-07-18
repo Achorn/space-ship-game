@@ -11,7 +11,8 @@ export default class Title extends GameState {
 
   update(deltaTime) {
     // press any button to enter new state
-    if (this.game.userInput.controls["enter"] == true) {
+
+    if (this.game.userInput.controls["a"] == true) {
       let newState = new HomeMenu();
       newState.enterState();
     }

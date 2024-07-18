@@ -29,7 +29,7 @@ export default class GameScene extends GameState {
   update(deltaTime) {
     this.disposeEntities();
     //check for state change
-    if (this.game.userInput.controls["p"] == true) {
+    if (this.game.userInput.controls["start"] == true) {
       let newState = new PauseMenu();
       newState.enterState();
       this.game.userInput.resetKeys();

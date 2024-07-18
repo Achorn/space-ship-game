@@ -50,6 +50,9 @@ export default class Game {
     this.renderer.resize();
   }
   update() {
+    this.userInput.gamepadControllerInput();
+
+    this.userInput.updateGamepad();
     this.renderer.update();
 
     this.context2d.clearRect(0, 0, window.innerWidth, window.innerHeight);

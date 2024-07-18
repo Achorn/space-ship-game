@@ -1,5 +1,8 @@
+import Game from "../Game";
+
 export default class BasicCharacterControllerInput {
   constructor() {
+    this.game = new Game();
     this.keys = {
       forward: false,
       backward: false,
@@ -12,71 +15,24 @@ export default class BasicCharacterControllerInput {
       start: false,
       shoot: false,
     };
-    document.addEventListener("keydown", (e) => this.onKeyDown(e), false);
-    document.addEventListener("keyup", (e) => this.onKeyUp(e), false);
   }
 
-  onKeyDown(event) {
-    switch (event.keyCode) {
-      case 87: // w
-        this.keys.down = true;
-        break;
-      case 65: // a
-        this.keys.left = true;
-        break;
-      case 83: // s
-        this.keys.up = true;
-        break;
-      case 68: // d
-        this.keys.right = true;
-        break;
-      case 37: //  left arrow
-        this.keys.rotateLeft = true;
-        break;
-      case 39: //  right arrow
-        this.keys.rotateRight = true;
-        break;
-      case 38: //  up arrow
-        this.keys.forward = true;
-        break;
-      case 40: //  down arrow
-        this.keys.backward = true;
-        break;
-      case 32: //  space
-        this.keys.shoot = true;
-        break;
-    }
-  }
+  update() {
+    let controls = this.game.userInput.controls;
 
-  onKeyUp(event) {
-    switch (event.keyCode) {
-      case 87: // w
-        this.keys.down = false;
-        break;
-      case 65: // a
-        this.keys.left = false;
-        break;
-      case 83: // s
-        this.keys.up = false;
-        break;
-      case 68: // d
-        this.keys.right = false;
-        break;
-      case 37: //  left arrow
-        this.keys.rotateLeft = false;
-        break;
-      case 39: //  right arrow
-        this.keys.rotateRight = false;
-        break;
-      case 38: //  up arrow
-        this.keys.forward = false;
-        break;
-      case 40: //  down arrow
-        this.keys.backward = false;
-        break;
-      case 32: //  space
-        this.keys.shoot = false;
-        break;
-    }
+    //angle ship
+    this.keys.right = controls.leftAnalogRight;
+    this.keys.up = controls.leftAnalogDown;
+    this.keys.left = controls.leftAnalogLeft;
+    this.keys.down = controls.leftAnalogUp;
+
+    //rotate ship
+    this.keys.forward = controls.rightAnalogUp;
+    this.keys.backward = controls.rightAnalogDown;
+    this.keys.rotateLeft = controls.rightAnalogLeft;
+    this.keys.rotateRight = controls.rightAnalogRight;
+
+    // shoot
+    this.keys.shoot = controls.rightBumper;
   }
 }

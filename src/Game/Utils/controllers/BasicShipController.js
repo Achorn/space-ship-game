@@ -8,7 +8,9 @@ export default class BasicShipController {
     this.gameScene = gameScene;
     this.game = new Game();
     this.position = new THREE.Vector3();
-    this.input = new BasicCharacterControllerInput();
+    this.input = new BasicCharacterControllerInput(
+      this.game.userInput.controls
+    );
     this.target = target;
 
     //control variables
@@ -45,6 +47,7 @@ export default class BasicShipController {
   }
 
   update(deltaTime) {
+    this.input.update();
     // is shooting!!!
     if (this.input.keys.shoot && this.canShoot <= 0) {
       this.canShoot = 200;
