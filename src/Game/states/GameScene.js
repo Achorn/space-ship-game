@@ -29,7 +29,7 @@ export default class GameScene extends GameState {
   update(deltaTime) {
     this.disposeEntities();
     //check for state change
-    if (this.game.userInput.controls["p"] == true) {
+    if (this.game.userInput.controls["start"] == true) {
       let newState = new PauseMenu();
       newState.enterState();
       this.game.userInput.resetKeys();
@@ -93,6 +93,19 @@ export default class GameScene extends GameState {
     context.font = "24px serif";
     context.fillStyle = "blue";
     context.fillText("press 'p' to pause", 100, 200);
+
+    // context.font = "24px serif";
+    // context.fillStyle = "white";
+    // let controls = this.game.userInput.controls;
+    // let filter = Object.keys(controls).filter(
+    //   (value) => controls[value] == true
+    // );
+    // context.fillText(filter, 100, 300);
+
+    // for debugging!!
+    // context.font = "24px serif";
+    // context.fillStyle = "white";
+    // context.fillText(this.game.debugStatement, 100, 400);
   }
 
   exitState() {

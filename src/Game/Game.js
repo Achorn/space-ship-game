@@ -31,6 +31,8 @@ export default class Game {
     this.stateStack = [];
     this.loadStates();
 
+    this.debugStatement = "debug";
+
     // Sizes resize event
     this.sizes.on("resize", () => {
       this.resize();
@@ -50,6 +52,9 @@ export default class Game {
     this.renderer.resize();
   }
   update() {
+    this.userInput.gamepadControllerInput();
+
+    this.userInput.updateGamepad();
     this.renderer.update();
 
     this.context2d.clearRect(0, 0, window.innerWidth, window.innerHeight);

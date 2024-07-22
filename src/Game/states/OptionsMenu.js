@@ -22,18 +22,6 @@ class OptionsMenu extends GameState {
   update(deltaTime) {
     this.menu.update(this.game.userInput.controls);
 
-    let actions = this.game.userInput.controls;
-
-    // if (actions["p"] == true) {
-    //   this.exitState();
-    // }
-    // if (actions["q"] == true) {
-    //   this.game.userInput.resetKeys();
-
-    //   while (this.game.stateStack.length > 1) {
-    //     this.game.stateStack[this.game.stateStack.length - 1].exitState();
-    //   }
-    // }
     this.game.userInput.resetKeys();
   }
 
