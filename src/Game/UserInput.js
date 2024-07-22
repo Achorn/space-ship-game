@@ -4,7 +4,7 @@ export default class UserInput {
   constructor() {
     this.game = new Game();
     this.controls = {};
-    this.active = true;
+    this.isActive = true;
     this.setListeners();
     this.controllerIndex = null;
     this.previousGamepadButtons = null;
@@ -23,7 +23,7 @@ export default class UserInput {
 
     //setup keyboard clicky clacky
     document.addEventListener("keydown", (e) => {
-      if (!this.active) return;
+      if (!this.isActive) return;
       switch (e.key) {
         case "ArrowUp":
           this.controls.rightAnalogUp = true;
@@ -64,7 +64,7 @@ export default class UserInput {
       }
     });
     document.addEventListener("keyup", (e) => {
-      if (!this.active) return;
+      if (!this.isActive) return;
 
       switch (e.key) {
         case "ArrowUp":
@@ -192,7 +192,7 @@ export default class UserInput {
   }
 
   updateGamepad() {
-    if (!this.active) return;
+    if (!this.isActive) return;
     let newGamepad = navigator.getGamepads()[0];
     if (!newGamepad) return;
     newGamepad.buttons.forEach((button, index) => {
