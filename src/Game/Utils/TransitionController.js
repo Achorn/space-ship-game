@@ -26,16 +26,12 @@ class TransitionController {
       duration: 0.5,
       ease: "circ.in",
       onComplete: () => {
-        console.log("halfway");
         action();
         gsap.to(this.options, {
           alpha: 0,
           duration: 0.5,
           ease: "circ.out",
-
           onComplete: () => {
-            console.log("finished");
-
             this.userInput.isActive = true;
           },
         });

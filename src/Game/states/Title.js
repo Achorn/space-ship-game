@@ -16,7 +16,6 @@ export default class Title extends GameState {
       this.game.transitionController.transition(() => {
         let newState = new HomeMenu();
         newState.enterState();
-        console.log("inside??");
       });
     }
     // this.game.camera.update();

@@ -11,6 +11,12 @@ class OptionsMenu extends GameState {
       },
       { name: "music: ON", action: () => {} },
       {
+        name: "Fullscreen",
+        action: () => {
+          this.game.sizes.toggleFullscreen();
+        },
+      },
+      {
         name: "back",
         action: () => {
           this.game.stateStack[this.game.stateStack.length - 1].exitState();
