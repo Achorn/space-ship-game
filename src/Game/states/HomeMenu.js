@@ -9,7 +9,11 @@ class HomeMenu extends GameState {
     this.buttons = [
       {
         name: "play",
-        action: () => new GameScene().enterState(),
+        action: () => {
+          this.game.transitionController.transition(() => {
+            new GameScene().enterState();
+          });
+        },
       },
       { name: "options", action: () => new OptionsMenu().enterState() },
       {

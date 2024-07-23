@@ -7,6 +7,7 @@ import Renderer from "./Renderer";
 import World from "./World/World";
 import UserInput from "./UserInput";
 import Title from "./states/Title";
+import TransitionController from "./Utils/TransitionController";
 
 let instance = null;
 
@@ -28,6 +29,7 @@ export default class Game {
     this.scene = new THREE.Scene();
     this.camera = new Camera();
     this.renderer = new Renderer();
+    this.transitionController = new TransitionController();
     this.stateStack = [];
     this.loadStates();
 
@@ -53,16 +55,19 @@ export default class Game {
   }
   update() {
     this.userInput.gamepadControllerInput();
-
     this.userInput.updateGamepad();
+
     this.renderer.update();
 
     this.context2d.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
     this.stateStack[this.stateStack.length - 1].update(
       this.time.delta,
       this.userInput.controls
     );
+
     this.stateStack[this.stateStack.length - 1].render(this.context2d);
+    this.transitionController.update();
   }
   destroy() {}
 }
