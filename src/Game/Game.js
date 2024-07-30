@@ -68,6 +68,9 @@ export default class Game {
 
     this.stateStack[this.stateStack.length - 1].render(this.context2d);
     this.transitionController.update();
+    // this.canvas2d.context.font = "24px serif";
+    // this.canvas2d.context.fillStyle = "white";
+    // this.canvas2d.context.fillText(this.game.debugStatement, 100, 400);
   }
   destroy() {}
 }
