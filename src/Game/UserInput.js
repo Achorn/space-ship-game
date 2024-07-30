@@ -4,6 +4,7 @@ export default class UserInput {
   constructor() {
     this.game = new Game();
     this.controls = {};
+    this.isActive = true;
     this.setListeners();
     this.controllerIndex = null;
     this.previousGamepadButtons = null;
@@ -22,7 +23,7 @@ export default class UserInput {
 
     //setup keyboard clicky clacky
     document.addEventListener("keydown", (e) => {
-      // if (this.controllerIndex) return;
+      if (!this.isActive) return;
       switch (e.key) {
         case "ArrowUp":
           this.controls.rightAnalogUp = true;
@@ -63,7 +64,7 @@ export default class UserInput {
       }
     });
     document.addEventListener("keyup", (e) => {
-      // if (this.controllerIndex) return;
+      if (!this.isActive) return;
 
       switch (e.key) {
         case "ArrowUp":
@@ -191,6 +192,7 @@ export default class UserInput {
   }
 
   updateGamepad() {
+    if (!this.isActive) return;
     let newGamepad = navigator.getGamepads()[0];
     if (!newGamepad) return;
     newGamepad.buttons.forEach((button, index) => {
@@ -227,18 +229,6 @@ export default class UserInput {
 
     const buttons = gamepad.buttons;
 
-    // ABXY BUTTONS
-    // this.controls.b = buttons[0].pressed;
-    // this.controls.a = buttons[1].pressed;
-    // this.controls.y = buttons[2].pressed;
-    // this.controls.x = buttons[3].pressed;
-
-    //Dpad
-    // this.controls.dPadUp = buttons[12].pressed;
-    // this.controls.dPadDown = buttons[13].pressed;
-    // this.controls.dPadLeft = buttons[14].pressed;
-    // this.controls.dPadRight = buttons[15].pressed;
-
     //Left Analog
     this.controls.leftAnalogUp = gamepad.axes[1] < -0.7;
     this.controls.leftAnalogDown = gamepad.axes[1] > 0.7;
@@ -252,15 +242,6 @@ export default class UserInput {
     this.controls.rightAnalogLeft = gamepad.axes[2] < -0.7;
     this.controls.rightAnalogRight = gamepad.axes[2] > 0.7;
     // this.controls.rightAnalogClick = buttons[11].pressed;
-
-    //Trigger buttons
-    // this.controls.leftBumper = buttons[4].pressed;
-    // this.controls.LeftTrigger = buttons[6].pressed;
-    // this.controls.rightBumper = buttons[5].pressed;
-    // this.controls.rightTrigger = buttons[7].pressed;
-
-    // start buttons
-    // this.controls.start = buttons[9].pressed;
   }
 
   resetKeys() {

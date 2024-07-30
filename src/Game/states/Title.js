@@ -13,8 +13,10 @@ export default class Title extends GameState {
     // press any button to enter new state
 
     if (this.game.userInput.controls["a"] == true) {
-      let newState = new HomeMenu();
-      newState.enterState();
+      this.game.transitionController.transition(() => {
+        let newState = new HomeMenu();
+        newState.enterState();
+      });
     }
     // this.game.camera.update();
 
