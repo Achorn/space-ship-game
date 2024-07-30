@@ -44,7 +44,7 @@ class Bullet extends GameEntity {
       //collide with target?
       const enemies = colliders.filter((c) => c.entityType === "target");
       if (enemies.length) {
-        enemies[0].damage(20);
+        enemies[0].damage(30);
       }
     }
 

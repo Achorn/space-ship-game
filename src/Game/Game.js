@@ -8,6 +8,7 @@ import World from "./World/World";
 import UserInput from "./UserInput";
 import Title from "./states/Title";
 import TransitionController from "./Utils/TransitionController";
+import GameScene from "./states/GameScene";
 
 let instance = null;
 
@@ -47,6 +48,7 @@ export default class Game {
   loadStates() {
     this.titleScreen = new Title();
     this.stateStack.push(this.titleScreen);
+    // this.stateStack.push(new GameScene());
   }
 
   resize() {

@@ -13,7 +13,7 @@ class Target extends GameEntity {
 
   load = () => {
     const material = new THREE.MeshNormalMaterial();
-    const geometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
+    const geometry = new THREE.BoxGeometry(0.6, 0.6, 0.6);
     this.mesh = new THREE.Mesh(geometry, material);
     this.gameScene.addToScene(this);
     this.mesh.position.copy(this.position);
