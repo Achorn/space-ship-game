@@ -82,6 +82,7 @@ export default class GameScene extends GameState {
 
   render(context) {
     // Draw blue triangle
+    context.save();
     context.beginPath();
     context.fillStyle = "blue";
     context.moveTo(20, 20);
@@ -89,6 +90,7 @@ export default class GameScene extends GameState {
     context.lineTo(130, 130);
     context.closePath();
     context.fill();
+    context.textAlign = "start";
 
     context.font = "48px serif";
     context.fillStyle = "green";
@@ -97,6 +99,7 @@ export default class GameScene extends GameState {
     context.font = "24px serif";
     context.fillStyle = "blue";
     context.fillText("press 'start' to pause", 100, 200);
+    context.restore();
   }
 
   exitState() {

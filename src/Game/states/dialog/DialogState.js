@@ -18,33 +18,74 @@ class DialogState extends GameState {
   render(context) {
     // put words to screen!!!!
     // Add gradient
-    let width = 1000;
-    let px_size = 40;
     // Add gradient
     // let grd = context.createLinearGradient(0, , 800, 0);
     // grd.addColorStop(0, "#00a0ff");
     // grd.addColorStop(1, "#12cba6");
     context.fillStyle = "rgba(0,0,0,0.5)";
     context.fillRect(0, 0, this.game.canvas.width, this.game.canvas.height);
-    console.log(context.textAlign);
     // More text
+
+    /// LETS MAKE A BOX!!!!
+
+    let outerBoxHeight = 300;
+    let outerBoxWidth = this.game.canvas.width / 2;
+    let canvasHeight = this.game.canvas.height / 2;
+    let canvasWidth = this.game.canvas.width / 2;
+    context.fillStyle = "green";
+    let outerStartingX = 0;
+    let outerStartingY = canvasHeight - outerBoxHeight - 20;
+
+    // context.fillRect(
+    //   outerStartingX,
+    //   outerStartingY,
+    //   outerBoxWidth,
+    //   outerBoxHeight
+    // );
+
+    //add container for text
+    context.fillStyle = "red";
+    let textBoxWidth = 800;
+
+    // 3/8 ratio
+    textBoxWidth = Math.min(textBoxWidth, canvasWidth);
+    let textBoxHeight = (textBoxWidth * 3) / 8;
+
+    let textBoxStartingX = canvasWidth / 2 - textBoxWidth / 2;
+
+    let textBoxStartingY = outerStartingY;
+
+    // context.fillRect(
+    //   textBoxStartingX,
+    //   textBoxStartingY,
+    //   textBoxWidth,
+    //   textBoxHeight
+    // );
+    let padding = 10;
+    // add text to container
+
     context.save();
-    context.font = px_size + "px Helvetica";
+    let px_size = (textBoxWidth / 22) | 0;
+    //(canvas.width / 22) | 0
+
+    context.font = "600 " + px_size + "px Helvetica";
     context.fillStyle = "white";
     let lineHeight = px_size + 10;
 
     let wrappedText = wrapText(
       context,
-      "You're visiting a friend and see that someone has dumped a lot of trash in the local area. You decide to help out by blasting away the colorful waste chunks floating in space... press A to continue",
-      20,
-      40,
-      width,
-      lineHeight
+      `"While visiting a friend, you see that someone has dumped a lot of trash in the local area. You decide to help out by blasting away the colorful waste chunks floating in space... press A to continue"`,
+      textBoxStartingX,
+      textBoxStartingY,
+      textBoxWidth,
+      lineHeight,
+      padding
     );
     context.textAlign = "start";
+    context.textBaseline = "top";
     wrappedText.forEach(function (item) {
-      context.textBaseline = "middle";
-      context.fillText(item[0], item[1], item[2]);
+      // context.textBaseline = "middle";
+      context.fillText(item[0], item[1] + padding, item[2] + padding);
     });
     context.restore();
   }
@@ -65,7 +106,8 @@ const wrapText = function (
   startingX,
   startingY,
   maxWidth,
-  lineHeight
+  lineHeight,
+  padding
 ) {
   // First, start by splitting all of our text into words, but splitting it into an array split by spaces
   let words = text.split(" ");
