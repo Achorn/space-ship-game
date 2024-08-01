@@ -17,7 +17,7 @@ class TransitionController {
   }
 
   // transitionIn, action, transitionOut
-  transition = (action) => {
+  transition = (action = () => {}, endAction = () => {}) => {
     // transition in
     // this.selectedTransition = new Transition();
     this.userInput.isActive = false;
@@ -33,6 +33,7 @@ class TransitionController {
           ease: "circ.out",
           onComplete: () => {
             this.userInput.isActive = true;
+            endAction();
           },
         });
       },

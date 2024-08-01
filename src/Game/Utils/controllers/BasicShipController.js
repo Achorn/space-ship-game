@@ -95,7 +95,7 @@ export default class BasicShipController {
     this.turnVelocity *= 0.95;
     this.speedModifier *= 0.95;
 
-    var leftAdjustment = 0.0015;
+    var leftAdjustment = 0.0013;
 
     //TODO no need to dpulicate left and right axes. reduce to one each
     if (this.input.keys.up) {

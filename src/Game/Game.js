@@ -9,6 +9,7 @@ import UserInput from "./UserInput";
 import Title from "./states/Title";
 import TransitionController from "./Utils/TransitionController";
 import GameScene from "./states/GameScene";
+import DialogState from "./states/dialog/DialogState";
 
 let instance = null;
 
@@ -48,7 +49,7 @@ export default class Game {
   loadStates() {
     this.titleScreen = new Title();
     this.stateStack.push(this.titleScreen);
-    // this.stateStack.push(new GameScene());
+    // new DialogState().enterState();
   }
 
   resize() {

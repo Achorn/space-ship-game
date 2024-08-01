@@ -5,11 +5,14 @@ import BasicShipController from "../Utils/controllers/BasicShipController";
 import ThirdPersonShipCamera from "../Utils/cameras/ThirdPersonShipCamera";
 import PlayerShip from "../World/PlayerShip";
 import TargetLoader from "./gameScene/targetLoader";
+import DialogState from "./dialog/DialogState";
 
 export default class GameScene extends GameState {
   constructor() {
     super();
-
+    this.init();
+  }
+  init() {
     this.gameEntities = [];
     this.world = new World(this);
     this.playerShip = new PlayerShip();
@@ -56,6 +59,7 @@ export default class GameScene extends GameState {
     this.controls.update(deltaTime);
     this.thirdPersonCamera.update(deltaTime);
   }
+
   addToScene = (entity) => {
     this.gameEntities.push(entity);
     this.game.scene.add(entity.mesh);
@@ -92,7 +96,7 @@ export default class GameScene extends GameState {
 
     context.font = "24px serif";
     context.fillStyle = "blue";
-    context.fillText("press 'p' to pause", 100, 200);
+    context.fillText("press 'start' to pause", 100, 200);
   }
 
   exitState() {

@@ -2,6 +2,7 @@ import GameState from "./GameState";
 import GameScene from "./GameScene";
 import Menu from "../../ui/menu";
 import OptionsMenu from "./OptionsMenu";
+import DialogState from "./dialog/DialogState";
 
 class HomeMenu extends GameState {
   constructor() {
@@ -10,9 +11,14 @@ class HomeMenu extends GameState {
       {
         name: "play",
         action: () => {
-          this.game.transitionController.transition(() => {
-            new GameScene().enterState();
-          });
+          this.game.transitionController.transition(
+            () => {
+              new GameScene().enterState();
+            },
+            () => {
+              new DialogState().enterState();
+            }
+          );
         },
       },
       { name: "options", action: () => new OptionsMenu().enterState() },

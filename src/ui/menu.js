@@ -47,6 +47,7 @@ class Menu {
   }
 
   drawButtons = () => {
+    this.ctx.save();
     let menuStartPos =
       this.canvas.height / 2 - this.bricks.length * this.buttonHeight;
     for (let c = 0; c < this.buttonRowCount; c++) {
@@ -62,8 +63,6 @@ class Menu {
       this.ctx.fillStyle = this.selectedIndex == c ? "red" : "#0095DD";
       this.ctx.fill();
 
-      this.ctx.closePath();
-      this.ctx.save();
       this.ctx.font = "48px serif";
       this.ctx.textAlign = "center";
       this.ctx.textBaseline = "middle";
