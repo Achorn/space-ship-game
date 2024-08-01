@@ -9,42 +9,32 @@ class DialogState extends GameState {
     // leave when button is pressed
     // what to present? menu with description and button?
     if (this.game.userInput.controls["a"] == true) {
-      console.log("popping?");
       this.game.stateStack.pop();
     }
     this.game.userInput.resetKeys();
   }
 
   render(context) {
-    // put words to screen!!!!
-    // Add gradient
-    // Add gradient
-    // let grd = context.createLinearGradient(0, , 800, 0);
-    // grd.addColorStop(0, "#00a0ff");
-    // grd.addColorStop(1, "#12cba6");
     context.fillStyle = "rgba(0,0,0,0.5)";
     context.fillRect(0, 0, this.game.canvas.width, this.game.canvas.height);
-    // More text
 
-    /// LETS MAKE A BOX!!!!
-
+    let canvasHeight = this.game.canvas2d.height;
+    let canvasWidth = this.game.canvas2d.width;
     let outerBoxHeight = 300;
-    let outerBoxWidth = this.game.canvas.width / 2;
-    let canvasHeight = this.game.canvas.height / 2;
-    let canvasWidth = this.game.canvas.width / 2;
-    context.fillStyle = "green";
+    let outerBoxWidth = canvasWidth;
+    context.fillStyle = "white";
     let outerStartingX = 0;
     let outerStartingY = canvasHeight - outerBoxHeight - 20;
 
-    // context.fillRect(
-    //   outerStartingX,
-    //   outerStartingY,
-    //   outerBoxWidth,
-    //   outerBoxHeight
-    // );
+    context.fillRect(
+      outerStartingX,
+      outerStartingY,
+      outerBoxWidth,
+      outerBoxHeight
+    );
 
     //add container for text
-    context.fillStyle = "red";
+    context.fillStyle = "rgba(255,255,255,.8)";
     let textBoxWidth = 800;
 
     // 3/8 ratio
@@ -55,37 +45,40 @@ class DialogState extends GameState {
 
     let textBoxStartingY = outerStartingY;
 
-    // context.fillRect(
-    //   textBoxStartingX,
-    //   textBoxStartingY,
-    //   textBoxWidth,
-    //   textBoxHeight
-    // );
-    let padding = 10;
+    context.fillRect(
+      textBoxStartingX,
+      textBoxStartingY,
+      textBoxWidth,
+      textBoxHeight
+    );
     // add text to container
 
     context.save();
-    let px_size = (textBoxWidth / 22) | 0;
+    let px_size = (textBoxWidth / 26) | 0;
+    let padding = (textBoxWidth / 20) | 0;
     //(canvas.width / 22) | 0
 
     context.font = "600 " + px_size + "px Helvetica";
-    context.fillStyle = "white";
+    context.fillStyle = "black";
     let lineHeight = px_size + 10;
 
     let wrappedText = wrapText(
       context,
-      `"While visiting a friend, you see that someone has dumped a lot of trash in the local area. You decide to help out by blasting away the colorful waste chunks floating in space... press A to continue"`,
+      `While visiting a friend, you see that someone has dumped a lot of trash in the local area. You decide to help out by blasting away the colorful waste chunks floating in space... press A to continue`,
       textBoxStartingX,
       textBoxStartingY,
-      textBoxWidth,
-      lineHeight,
-      padding
+      textBoxWidth - padding - padding,
+      lineHeight
     );
     context.textAlign = "start";
     context.textBaseline = "top";
     wrappedText.forEach(function (item) {
       // context.textBaseline = "middle";
-      context.fillText(item[0], item[1] + padding, item[2] + padding);
+      context.fillText(
+        item.curLine,
+        item.startingX + padding,
+        item.startingY + padding
+      );
     });
     context.restore();
   }
@@ -106,39 +99,40 @@ const wrapText = function (
   startingX,
   startingY,
   maxWidth,
-  lineHeight,
-  padding
+  lineHeight
 ) {
-  // First, start by splitting all of our text into words, but splitting it into an array split by spaces
   let words = text.split(" ");
-  let line = ""; // This will store the text of the current line
-  let testLine = ""; // This will store the text when we add a word, to test if it's too long
-  let lineArray = []; // This is an array of lines, which the function will return
+  let curLine = "";
+  let testLine = "";
+  let lineArray = [];
 
-  // Lets iterate over each word
   for (var n = 0; n < words.length; n++) {
-    // Create a test line, and measure it..
     testLine += `${words[n]} `;
     let metrics = ctx.measureText(testLine);
     let testWidth = metrics.width;
-    // If the width of this test line is more than the max width
     if (testWidth > maxWidth && n > 0) {
-      // Then the line is finished, push the current line into "lineArray"
-      lineArray.push([line, startingX, startingY]);
-      // Increase the line height, so a new line is started
+      lineArray.push({ curLine, startingX, startingY });
       startingY += lineHeight;
-      // Update line and test line to use this word as the first word on the next line
-      line = `${words[n]} `;
+      curLine = `${words[n]} `;
       testLine = `${words[n]} `;
     } else {
-      // If the test line is still less than the max width, then add the word to the current line
-      line += `${words[n]} `;
+      curLine += `${words[n]} `;
     }
-    // If we never reach the full max width, then there is only one line.. so push it into the lineArray so we return something
     if (n === words.length - 1) {
-      lineArray.push([line, startingX, startingY]);
+      lineArray.push({ curLine, startingX, startingY });
     }
   }
-  // Return the line array
   return lineArray;
 };
+
+class textBox {
+  constructor(height, width, padding) {
+    this.height = height;
+    this.width = width;
+    this.padding = padding;
+  }
+}
+
+class Text {
+  constructor() {}
+}
