@@ -41,11 +41,11 @@ class Bullet extends GameEntity {
       const explosion = new ExplosionEffect(this.mesh.position, 1);
       this.gameScene.addToScene(explosion);
 
-      //collide with enemy?
-      // const enemies = colliders.filter((c) => c.entityType === "enemy");
-      // if (enemies.length) {
-      //   enemies[0].damage(20);
-      // }
+      //collide with target?
+      const enemies = colliders.filter((c) => c.entityType === "target");
+      if (enemies.length) {
+        enemies[0].damage(30);
+      }
     }
 
     if (this.existance > 800) this.shouldDispose = true;

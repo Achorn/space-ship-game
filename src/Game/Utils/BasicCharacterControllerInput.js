@@ -18,20 +18,20 @@ export default class BasicCharacterControllerInput {
   }
 
   update() {
+    //todo
     let controls = this.game.userInput.controls;
 
     //angle ship
-    this.keys.right = controls.leftAnalogRight;
-    this.keys.up = controls.leftAnalogDown;
-    this.keys.left = controls.leftAnalogLeft;
-    this.keys.down = controls.leftAnalogUp;
+    this.keys.up = Math.max(controls.leftAnalogForward, 0);
+    this.keys.down = Math.min(controls.leftAnalogForward, 0);
+    this.keys.left = Math.min(controls.leftAnalogSide, 0);
+    this.keys.right = Math.max(controls.leftAnalogSide, 0);
 
     //rotate ship
-    this.keys.forward = controls.rightAnalogUp;
-    this.keys.backward = controls.rightAnalogDown;
-    this.keys.rotateLeft = controls.rightAnalogLeft;
-    this.keys.rotateRight = controls.rightAnalogRight;
-
+    this.keys.forward = Math.max(controls.rightAnalogForward, 0);
+    this.keys.backward = Math.min(controls.rightAnalogForward, 0);
+    this.keys.rotateLeft = Math.min(controls.rightAnalogSide, 0);
+    this.keys.rotateRight = Math.max(controls.rightAnalogSide, 0);
     // shoot
     this.keys.shoot = controls.rightBumper;
   }

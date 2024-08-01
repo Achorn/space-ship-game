@@ -230,17 +230,13 @@ export default class UserInput {
     const buttons = gamepad.buttons;
 
     //Left Analog
-    this.controls.leftAnalogUp = gamepad.axes[1] < -0.7;
-    this.controls.leftAnalogDown = gamepad.axes[1] > 0.7;
-    this.controls.leftAnalogLeft = gamepad.axes[0] < -0.7;
-    this.controls.leftAnalogRight = gamepad.axes[0] > 0.7;
+    this.controls.leftAnalogForward = gamepad.axes[1];
+    this.controls.leftAnalogSide = gamepad.axes[0];
     // this.controls.leftAnalogClick = buttons[10].pressed;
 
     //Right Analog
-    this.controls.rightAnalogUp = gamepad.axes[3] < -0.7;
-    this.controls.rightAnalogDown = gamepad.axes[3] > 0.7;
-    this.controls.rightAnalogLeft = gamepad.axes[2] < -0.7;
-    this.controls.rightAnalogRight = gamepad.axes[2] > 0.7;
+    this.controls.rightAnalogForward = gamepad.axes[3];
+    this.controls.rightAnalogSide = gamepad.axes[2];
     // this.controls.rightAnalogClick = buttons[11].pressed;
   }
 

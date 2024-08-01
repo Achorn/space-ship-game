@@ -4,6 +4,7 @@ import PauseMenu from "./PauseMenu";
 import BasicShipController from "../Utils/controllers/BasicShipController";
 import ThirdPersonShipCamera from "../Utils/cameras/ThirdPersonShipCamera";
 import PlayerShip from "../World/PlayerShip";
+import TargetLoader from "./gameScene/targetLoader";
 
 export default class GameScene extends GameState {
   constructor() {
@@ -13,10 +14,9 @@ export default class GameScene extends GameState {
     this.world = new World(this);
     this.playerShip = new PlayerShip();
     this.game.camera.ship = this.playerShip;
-
+    new TargetLoader(this); //call once and then it dissapears???
     this.bullets = [];
     this.bulletSpeedFactor = 1.4;
-
     this.gameEntities.push(this.playerShip);
 
     this.controls = new BasicShipController(this.playerShip.instance, this);

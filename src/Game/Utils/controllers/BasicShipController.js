@@ -28,7 +28,7 @@ export default class BasicShipController {
     this.pitchVelocity = 0;
     this.turnVelocity = 0;
 
-    this.planeSpeed = 0.03;
+    this.planeSpeed = 0.05;
     this.speedModifier = 0.03;
 
     //guns variables
@@ -95,47 +95,36 @@ export default class BasicShipController {
     this.turnVelocity *= 0.95;
     this.speedModifier *= 0.95;
 
-    if (Math.abs(this.jawVelocity) > this.maxVelocity) {
-      this.jawVelocity = Math.sign(this.jawVelocity) * this.maxVelocity;
+    var leftAdjustment = 0.0015;
+
+    //TODO no need to dpulicate left and right axes. reduce to one each
+    if (this.input.keys.up) {
+      this.pitchVelocity += Math.pow(this.input.keys.up, 2) * leftAdjustment;
     }
-    if (Math.abs(this.pitchVelocity) > this.maxVelocity) {
-      this.pitchVelocity = Math.sign(this.pitchVelocity) * this.maxVelocity;
+    if (this.input.keys.down) {
+      this.pitchVelocity -= Math.pow(this.input.keys.down, 2) * leftAdjustment;
     }
-    if (Math.abs(this.turnVelocity) > this.maxVelocity) {
-      this.turnVelocity = Math.sign(this.turnVelocity) * this.maxVelocity;
+    if (this.input.keys.left) {
+      this.turnVelocity += Math.pow(this.input.keys.left, 2) * leftAdjustment;
     }
-    if (Math.abs(this.speedModifier) > this.maxVelocity) {
-      this.speedModifier = Math.sign(this.speedModifier) * this.maxVelocity;
+    if (this.input.keys.right) {
+      this.turnVelocity -= Math.pow(this.input.keys.right, 2) * leftAdjustment;
     }
 
-    var adjustment = 0.001;
+    var rightAdjustment = 0.003;
 
     if (this.input.keys.forward) {
-      this.speedModifier += 0.0025;
+      this.speedModifier -= this.input.keys.forward * rightAdjustment;
     }
     if (this.input.keys.backward) {
-      this.speedModifier -= 0.0025;
+      this.speedModifier -= this.input.keys.backward * rightAdjustment;
     }
 
     if (this.input.keys.rotateLeft) {
-      this.jawVelocity += 0.0025;
+      this.jawVelocity -= this.input.keys.rotateLeft * rightAdjustment;
     }
     if (this.input.keys.rotateRight) {
-      this.jawVelocity -= 0.0025;
-    }
-
-    if (this.input.keys.up) {
-      this.pitchVelocity += adjustment;
-    }
-    if (this.input.keys.down) {
-      this.pitchVelocity -= adjustment;
-    }
-
-    if (this.input.keys.left) {
-      this.turnVelocity += adjustment;
-    }
-    if (this.input.keys.right) {
-      this.turnVelocity -= adjustment;
+      this.jawVelocity -= this.input.keys.rotateRight * rightAdjustment;
     }
 
     x.applyAxisAngle(y, this.turnVelocity);
