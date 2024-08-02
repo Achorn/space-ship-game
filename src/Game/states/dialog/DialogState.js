@@ -1,20 +1,32 @@
 import GameState from "../GameState";
 
+let lines = [
+  "While visiting a friend, you see that someone has dumped a lot of trash in the local area.",
+  "You decide to help out by blasting away the colorful spinning chunks floating in space... ",
+  "Press the right shoulder button on your controller to fire",
+  "When you're ready, press A to continue.",
+];
+
 class DialogState extends GameState {
   constructor() {
     super();
+    this.selectedLineIndex = 0;
   }
 
   update(deltaTime) {
     if (this.game.userInput.controls["a"] == true) {
-      this.game.stateStack.pop();
+      if (this.selectedLineIndex === lines.length - 1) {
+        this.game.stateStack.pop();
+      } else {
+        this.selectedLineIndex++;
+      }
     }
     this.game.userInput.resetKeys();
   }
 
   render(context) {
-    context.fillStyle = "rgba(0,0,0,0.5)";
-    context.fillRect(0, 0, this.game.canvas.width, this.game.canvas.height);
+    // context.fillStyle = "rgba(0,0,0,0.5)";
+    // context.fillRect(0, 0, this.game.canvas.width, this.game.canvas.height);
 
     let canvasHeight = this.game.canvas2d.height;
     let canvasWidth = this.game.canvas2d.width;
@@ -62,7 +74,7 @@ class DialogState extends GameState {
 
     let wrappedText = wrapText(
       context,
-      `While visiting a friend, you see that someone has dumped a lot of trash in the local area. You decide to help out by blasting away the colorful waste chunks floating in space... press A to continue`,
+      lines[this.selectedLineIndex],
       textBoxStartingX,
       textBoxStartingY,
       textBoxWidth - padding - padding,

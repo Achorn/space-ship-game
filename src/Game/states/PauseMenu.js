@@ -15,10 +15,14 @@ class PauseMenu extends GameState {
       {
         name: "quit",
         action: () => {
-          this.game.transitionController.transition(() => {
-            while (this.game.stateStack.length > 1) {
-              this.game.stateStack[this.game.stateStack.length - 1].exitState();
-            }
+          this.game.transitionController.transition({
+            midAction: () => {
+              while (this.game.stateStack.length > 1) {
+                this.game.stateStack[
+                  this.game.stateStack.length - 1
+                ].exitState();
+              }
+            },
           });
         },
       },

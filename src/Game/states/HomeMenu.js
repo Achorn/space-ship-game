@@ -11,14 +11,15 @@ class HomeMenu extends GameState {
       {
         name: "play",
         action: () => {
-          this.game.transitionController.transition(
-            () => {
+          this.game.transitionController.transition({
+            midAction: () => {
               new GameScene().enterState();
             },
-            () => {
+            fadeIntTime: 1.5,
+            endAction: () => {
               new DialogState().enterState();
-            }
-          );
+            },
+          });
         },
       },
       { name: "options", action: () => new OptionsMenu().enterState() },
