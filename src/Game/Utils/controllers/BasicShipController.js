@@ -90,12 +90,12 @@ export default class BasicShipController {
     this.target.matrixWorldNeedsUpdate = true;
   }
   updatePlaneAxis(x, y, z, planePosition) {
-    this.jawVelocity *= 0.95;
-    this.pitchVelocity *= 0.95;
-    this.turnVelocity *= 0.95;
-    this.speedModifier *= 0.95;
+    this.jawVelocity *= 0.93;
+    this.pitchVelocity *= 0.93;
+    this.turnVelocity *= 0.93;
+    this.speedModifier *= 0.93;
 
-    var leftAdjustment = 0.0013;
+    var leftAdjustment = 0.0015;
 
     //TODO no need to dpulicate left and right axes. reduce to one each
     if (this.input.keys.up) {

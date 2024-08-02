@@ -23,7 +23,7 @@ export default class Title extends GameState {
     this.game.userInput.resetKeys();
   }
   render(context) {
-    let x = this.game.canvas.width / 2;
+    let x = this.game.canvas2d.width;
     // TODO create 2d context for displaying title sequences menus and such
     //threejs is handing most of the drawing but on our 2d canvas with will esparate the updating and drawing
 

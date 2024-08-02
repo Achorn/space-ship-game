@@ -6,8 +6,6 @@ class DialogState extends GameState {
   }
 
   update(deltaTime) {
-    // leave when button is pressed
-    // what to present? menu with description and button?
     if (this.game.userInput.controls["a"] == true) {
       this.game.stateStack.pop();
     }
@@ -26,15 +24,15 @@ class DialogState extends GameState {
     let outerStartingX = 0;
     let outerStartingY = canvasHeight - outerBoxHeight - 20;
 
-    context.fillRect(
-      outerStartingX,
-      outerStartingY,
-      outerBoxWidth,
-      outerBoxHeight
-    );
+    // context.fillRect(
+    //   outerStartingX,
+    //   outerStartingY,
+    //   outerBoxWidth,
+    //   outerBoxHeight
+    // );
 
     //add container for text
-    context.fillStyle = "rgba(255,255,255,.8)";
+    context.fillStyle = "rgba(255,255,255,.9)";
     let textBoxWidth = 800;
 
     // 3/8 ratio
