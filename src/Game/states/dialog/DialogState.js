@@ -1,7 +1,8 @@
 import GameState from "../GameState";
 
 let lines = [
-  "While visiting a friend, you see that someone has dumped a lot of trash in the local area.",
+  "poop",
+  "While visiting a friend, you notice that someone has dumped a lot of trash in the local area.",
   "You decide to help out by blasting away the colorful spinning chunks floating in space... ",
   "Press the right shoulder button on your controller to fire",
   "When you're ready, press A to continue.",
@@ -33,19 +34,14 @@ class DialogState extends GameState {
     this.px_size = (this.textBoxWidth / 26) | 0;
     this.lineHeight = this.px_size + 10;
     this.font = "600 " + this.px_size + "px Helvetica";
-    this.wrappedTextArray = wrapText(
-      this.game.context2d,
-      lines[this.selectedLineIndex],
-      this.textBoxStartingX,
-      this.textBoxStartingY,
-      this.textBoxWidth - this.padding - this.padding,
-      this.lineHeight
-    );
+    this.wrappedTextArray = [];
+    this.updateNewDialog();
+
+    //wrapped text... what will actually be animated
+    this.animatedTextArray = [];
   }
 
   updateNewDialog() {
-    this.selectedLineIndex++;
-    console.log("udpateing wraper");
     this.wrappedTextArray = wrapText(
       this.game.context2d,
       lines[this.selectedLineIndex],
@@ -54,15 +50,38 @@ class DialogState extends GameState {
       this.textBoxWidth - this.padding - this.padding,
       this.lineHeight
     );
-    console.log(this.wrappedTextArray);
+    this.animatedTextArray = [];
+
+    for (let i = 0; i < this.wrappedTextArray.length; i++) {
+      this.animatedTextArray.push("");
+    }
+    let charList = this.wrappedTextArray[0].curLine.split("");
+    this.animateText(charList, 0);
   }
+  animateText = (charList, i) => {
+    let char = charList.splice(0, 1)[0];
+    let prev = this.animatedTextArray[i];
+    this.animatedTextArray[i] = !!prev ? prev + char : char;
+    if (charList.length > 0) {
+      setTimeout(() => {
+        this.animateText(charList, i);
+      }, 35);
+    } else {
+      if (this.animatedTextArray.length > i + 1) {
+        i++;
+        charList = this.wrappedTextArray[i].curLine.split("");
+        this.animateText(charList, i);
+      }
+    }
+  };
 
   update(deltaTime) {
     if (this.game.userInput.controls["a"] == true) {
       if (this.selectedLineIndex === lines.length - 1) {
         this.game.stateStack.pop();
       } else {
-        this.updateNewDialog(); // this.wrappedTextList = this.animateText();
+        this.selectedLineIndex++;
+        this.updateNewDialog();
       }
     }
     this.game.userInput.resetKeys();
@@ -89,15 +108,6 @@ class DialogState extends GameState {
     this.px_size = (this.textBoxWidth / 26) | 0;
     this.lineHeight = this.px_size + 10;
     this.font = "600 " + this.px_size + "px Helvetica";
-
-    this.wrappedTextArray = wrapText(
-      this.game.context2d,
-      lines[this.selectedLineIndex],
-      this.textBoxStartingX,
-      this.textBoxStartingY,
-      this.textBoxWidth - this.padding - this.padding,
-      this.lineHeight
-    );
   }
 
   render(context) {
@@ -123,33 +133,24 @@ class DialogState extends GameState {
 
     context.textAlign = "start";
     context.textBaseline = "top";
-    // this.wrappedTextArray = wrapText(
-    //   this.game.context2d,
-    //   lines[this.selectedLineIndex],
-    //   this.textBoxStartingX,
-    //   this.textBoxStartingY,
-    //   this.textBoxWidth - this.padding - this.padding,
-    //   this.lineHeight
-    // );
-    this.wrappedTextArray.forEach((item) => {
+
+    this.wrappedTextArray = wrapText(
+      this.game.context2d,
+      lines[this.selectedLineIndex],
+      this.textBoxStartingX,
+      this.textBoxStartingY,
+      this.textBoxWidth - this.padding - this.padding,
+      this.lineHeight
+    );
+    this.wrappedTextArray.forEach((item, i) => {
       context.fillText(
-        item.curLine,
+        this.animatedTextArray[i],
         item.startingX + this.padding,
         item.startingY + this.padding
       );
     });
     // context.restore();
   }
-  // animateText = (charList) => {
-  //   let char = charList.splice(0, 1)[0];
-  //   this.displayText += char;
-
-  //   if (charList.length > 0) {
-  //     setTimeout(function () {
-  //       this.animateText(charList);
-  //     }, 100);
-  //   }
-  // };
 }
 
 export default DialogState;
@@ -170,17 +171,15 @@ const wrapText = function (
   maxWidth,
   lineHeight
 ) {
-  console.log(ctx);
   let words = text.split(" ");
   let curLine = "";
   let testLine = "";
   let lineArray = [];
-  // console.log(startingX, startingY, maxWidth, lineHeight);
   for (var n = 0; n < words.length; n++) {
     testLine += `${words[n]} `;
+
     let metrics = ctx.measureText(testLine);
     let testWidth = metrics.width;
-    // console.log(testWidth, maxWidth);
     if (testWidth > maxWidth && n > 0) {
       lineArray.push({ curLine, startingX, startingY });
       startingY += lineHeight;
