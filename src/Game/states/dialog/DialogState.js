@@ -16,6 +16,7 @@ class DialogState extends GameState {
     this.displayTextList = [];
 
     //container
+    this.context = this.game.context2d;
     this.canvasHeight = this.game.canvas2d.height;
     this.canvasWidth = this.game.canvas2d.width;
     this.containerHeight = 300;
@@ -25,7 +26,7 @@ class DialogState extends GameState {
     this.textBoxMaxWidth = 800;
     this.textBoxWidth = Math.min(this.textBoxMaxWidth, this.canvasWidth);
     this.textBoxStartingX = this.canvasWidth / 2 - this.textBoxWidth / 2;
-    this.textBoxStartingY = this.outerStartingY;
+    this.textBoxStartingY = this.canvasHeight - this.containerHeight - 20;
     this.padding = (this.textBoxWidth / 20) | 0;
 
     //text
@@ -44,8 +45,9 @@ class DialogState extends GameState {
 
   updateNewDialog() {
     this.selectedLineIndex++;
+    console.log("udpateing wraper");
     this.wrappedTextArray = wrapText(
-      this.game.canvas2d.getContext("2d"),
+      this.game.context2d,
       lines[this.selectedLineIndex],
       this.textBoxStartingX,
       this.textBoxStartingY,
@@ -86,14 +88,16 @@ class DialogState extends GameState {
     // TEXT
     this.px_size = (this.textBoxWidth / 26) | 0;
     this.lineHeight = this.px_size + 10;
-    // this.wrappedTextArray = wrapText(
-    //   this.game.context2d,
-    //   lines[this.selectedLineIndex],
-    //   this.textBoxStartingX,
-    //   this.textBoxStartingY,
-    //   this.textBoxWidth - this.padding - this.padding,
-    //   this.lineHeight
-    // );
+    this.font = "600 " + this.px_size + "px Helvetica";
+
+    this.wrappedTextArray = wrapText(
+      this.game.context2d,
+      lines[this.selectedLineIndex],
+      this.textBoxStartingX,
+      this.textBoxStartingY,
+      this.textBoxWidth - this.padding - this.padding,
+      this.lineHeight
+    );
   }
 
   render(context) {
@@ -112,21 +116,21 @@ class DialogState extends GameState {
     );
 
     // text;
-    context.save();
+    // context.save();
 
     context.font = this.font;
     context.fillStyle = "black";
 
     context.textAlign = "start";
     context.textBaseline = "top";
-    this.wrappedTextArray = wrapText(
-      this.game.context2d,
-      lines[this.selectedLineIndex],
-      this.textBoxStartingX,
-      this.textBoxStartingY,
-      this.textBoxWidth - this.padding - this.padding,
-      this.lineHeight
-    );
+    // this.wrappedTextArray = wrapText(
+    //   this.game.context2d,
+    //   lines[this.selectedLineIndex],
+    //   this.textBoxStartingX,
+    //   this.textBoxStartingY,
+    //   this.textBoxWidth - this.padding - this.padding,
+    //   this.lineHeight
+    // );
     this.wrappedTextArray.forEach((item) => {
       context.fillText(
         item.curLine,
@@ -134,7 +138,7 @@ class DialogState extends GameState {
         item.startingY + this.padding
       );
     });
-    context.restore();
+    // context.restore();
   }
   // animateText = (charList) => {
   //   let char = charList.splice(0, 1)[0];
@@ -166,16 +170,17 @@ const wrapText = function (
   maxWidth,
   lineHeight
 ) {
+  console.log(ctx);
   let words = text.split(" ");
   let curLine = "";
   let testLine = "";
   let lineArray = [];
-  console.log(startingX, startingY, maxWidth, lineHeight);
+  // console.log(startingX, startingY, maxWidth, lineHeight);
   for (var n = 0; n < words.length; n++) {
     testLine += `${words[n]} `;
     let metrics = ctx.measureText(testLine);
     let testWidth = metrics.width;
-    console.log(testWidth, maxWidth);
+    // console.log(testWidth, maxWidth);
     if (testWidth > maxWidth && n > 0) {
       lineArray.push({ curLine, startingX, startingY });
       startingY += lineHeight;
