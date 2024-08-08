@@ -37,11 +37,11 @@ class DialogState extends GameState {
     this.px_size = (this.textBoxWidth / 26) | 0;
     this.lineHeight = this.px_size + 10;
     this.font = "600 " + this.px_size + "px Helvetica";
-    this.wrappedTextArray = [];
+    this.wrappedTextArray = [""];
     this.updateNewDialog();
 
     //wrapped text... what will actually be animated
-    this.animatedTextArray = [];
+    this.animatedTextArray = [""];
 
     this.timoutId = null;
     this.state = "active"; //active - finished
@@ -79,36 +79,23 @@ class DialogState extends GameState {
         i++;
         charList = this.wrappedTextArray[i].curLine.split("");
         this.animateText(charList, i);
+      } else {
+        this.state = "finished";
       }
     }
   };
 
   update(deltaTime) {
     if (this.game.userInput.controls["a"] == true) {
-      console.log("button pressed");
-      console.log(this.state);
       if (this.state === "active") {
-        console.log("we active");
         // animation in progress
         clearTimeout(this.timoutId);
-        console.log(this.animatedTextArray, this.wrappedTextArray);
         for (let i = 0; i < this.animatedTextArray.length; i++) {
-          console.log(i);
-          console.log(
-            this.animatedTextArray[i],
-            this.wrappedTextArray[i],
-            "hello?"
-          );
           this.animatedTextArray[i] = this.wrappedTextArray[i].curLine;
         }
-        console.log(this.animatedTextArray);
-
         this.state = "finished";
       } else {
-        console.log("we finished");
-
         //we should be finished!!
-
         if (this.selectedLineIndex === lines.length - 1) {
           //last  dialog box
           // animation is finished
@@ -150,7 +137,7 @@ class DialogState extends GameState {
     // context.fillRect(0, 0, this.game.canvas.width, this.game.canvas.height);
 
     context.fillStyle = "white";
-    context.fillStyle = "rgba(255,255,255,.9)";
+    context.fillStyle = "rgba(255,255,255,.7)";
 
     // Text Box
     context.fillRect(
