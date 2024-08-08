@@ -8,11 +8,14 @@ let lines = [
   "When you're ready, press A to continue.",
 ];
 
+// wait this might turn into a cutscene state!!!which only happens in the game which could take care of pausing the game or haulting updates... unless its trivial animations!!!
+
+// cut scene event. how to handle events... and dialog...
+
 class DialogState extends GameState {
   constructor() {
     super();
     this.selectedLineIndex = 0;
-
     this.wrappedTextList = [];
     this.displayTextList = [];
 
@@ -39,9 +42,14 @@ class DialogState extends GameState {
 
     //wrapped text... what will actually be animated
     this.animatedTextArray = [];
+
+    this.timoutId = null;
+    this.state = "active"; //active - finished
+    this.textSpeed = 35;
   }
 
   updateNewDialog() {
+    this.state = "active";
     this.wrappedTextArray = wrapText(
       this.game.context2d,
       lines[this.selectedLineIndex],
@@ -63,9 +71,9 @@ class DialogState extends GameState {
     let prev = this.animatedTextArray[i];
     this.animatedTextArray[i] = !!prev ? prev + char : char;
     if (charList.length > 0) {
-      setTimeout(() => {
+      this.timoutId = setTimeout(() => {
         this.animateText(charList, i);
-      }, 35);
+      }, this.textSpeed);
     } else {
       if (this.animatedTextArray.length > i + 1) {
         i++;
@@ -77,11 +85,38 @@ class DialogState extends GameState {
 
   update(deltaTime) {
     if (this.game.userInput.controls["a"] == true) {
-      if (this.selectedLineIndex === lines.length - 1) {
-        this.game.stateStack.pop();
+      console.log("button pressed");
+      console.log(this.state);
+      if (this.state === "active") {
+        console.log("we active");
+        // animation in progress
+        clearTimeout(this.timoutId);
+        console.log(this.animatedTextArray, this.wrappedTextArray);
+        for (let i = 0; i < this.animatedTextArray.length; i++) {
+          console.log(i);
+          console.log(
+            this.animatedTextArray[i],
+            this.wrappedTextArray[i],
+            "hello?"
+          );
+          this.animatedTextArray[i] = this.wrappedTextArray[i].curLine;
+        }
+        console.log(this.animatedTextArray);
+
+        this.state = "finished";
       } else {
-        this.selectedLineIndex++;
-        this.updateNewDialog();
+        console.log("we finished");
+
+        //we should be finished!!
+
+        if (this.selectedLineIndex === lines.length - 1) {
+          //last  dialog box
+          // animation is finished
+          this.game.stateStack.pop();
+        } else {
+          this.selectedLineIndex++;
+          this.updateNewDialog();
+        }
       }
     }
     this.game.userInput.resetKeys();
@@ -162,6 +197,24 @@ export default DialogState;
 // @param maxWidth - the width at which we want line breaks to begin - i.e. the maximum width of the canvas.
 // @param lineHeight - the height of each line, so we can space them below each other.
 // @returns an array of [ lineText, x, y ] for all lines
+
+class DialogBox {
+  // holds box and text and a little icon in the bottom right to animate what to do next...
+  constructor() {
+    // box =
+    // text =
+  }
+
+  update() {
+    // box.update()
+    //  text.update()
+  }
+
+  draw() {
+    //box.draw()
+    // text.draw()
+  }
+}
 
 const wrapText = function (
   ctx,
