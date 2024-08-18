@@ -49,7 +49,6 @@ export default class Game {
   loadStates() {
     this.titleScreen = new Title();
     this.stateStack.push(this.titleScreen);
-    // new DialogState().enterState();
   }
 
   resize() {

@@ -18,8 +18,10 @@ let lines = [
 // cut scene event. how to handle events... and dialog...
 
 class DialogState extends GameState {
-  constructor() {
+  constructor({ script, dialogFinishedAction }) {
     super();
+    this.script = script;
+    this.dialogFinishedAction = dialogFinishedAction;
     this.selectedLineIndex = 0;
     this.wrappedTextList = [];
     this.displayTextList = [];
@@ -57,7 +59,7 @@ class DialogState extends GameState {
     this.state = "active";
     this.wrappedTextArray = wrapText(
       this.game.context2d,
-      lines[this.selectedLineIndex],
+      this.script[this.selectedLineIndex],
       this.textBoxStartingX,
       this.textBoxStartingY,
       this.textBoxWidth - this.padding - this.padding,
@@ -101,10 +103,11 @@ class DialogState extends GameState {
         this.state = "finished";
       } else {
         //we should be finished!!
-        if (this.selectedLineIndex === lines.length - 1) {
+        if (this.selectedLineIndex === this.script.length - 1) {
           //last  dialog box
           // animation is finished
           this.game.stateStack.pop();
+          this.dialogFinishedAction();
         } else {
           this.selectedLineIndex++;
           this.updateNewDialog();
@@ -155,26 +158,27 @@ class DialogState extends GameState {
     // text;
     // context.save();
 
-    context.font = this.font;
-    context.fillStyle = "black";
-
-    context.textAlign = "start";
-    context.textBaseline = "top";
-
     this.wrappedTextArray = wrapText(
       this.game.context2d,
-      lines[this.selectedLineIndex],
+      this.script[this.selectedLineIndex],
       this.textBoxStartingX,
       this.textBoxStartingY,
       this.textBoxWidth - this.padding - this.padding,
       this.lineHeight
     );
     this.wrappedTextArray.forEach((item, i) => {
-      context.fillText(
-        this.animatedTextArray[i],
-        item.startingX + this.padding,
-        item.startingY + this.padding
-      );
+      let text = this.animatedTextArray[i];
+      let x = item.startingX + this.padding;
+      let y = item.startingY + this.padding;
+
+      // context.save();
+      context.font = this.font;
+      context.fillStyle = "black";
+
+      context.textAlign = "start";
+      context.textBaseline = "top";
+      context.fillText(text, x, y);
+      // context.restore();
     });
     // context.restore();
   }
