@@ -17,22 +17,28 @@ class TransitionController {
   }
 
   // transitionIn, action, transitionOut
-  transition = (action) => {
+  transition = ({
+    fadeoutTime = 1,
+    midAction = () => {},
+    fadeIntTime = 1,
+    endAction = () => {},
+  }) => {
     // transition in
     // this.selectedTransition = new Transition();
     this.userInput.isActive = false;
     gsap.to(this.options, {
       alpha: 1,
-      duration: 0.5,
+      duration: fadeoutTime,
       ease: "circ.in",
       onComplete: () => {
-        action();
+        midAction();
         gsap.to(this.options, {
           alpha: 0,
-          duration: 0.5,
+          duration: fadeIntTime,
           ease: "circ.out",
           onComplete: () => {
             this.userInput.isActive = true;
+            endAction();
           },
         });
       },

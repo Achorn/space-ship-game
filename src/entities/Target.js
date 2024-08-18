@@ -35,6 +35,7 @@ class Target extends GameEntity {
       this.shouldDispose = true;
       const explosion = new ExplosionEffect(this.mesh.position, 1.8, "normal");
       this.gameScene.addToScene(explosion);
+      this.gameScene.scoreBoard.addPoint();
     }
   }
   dispose = () => {

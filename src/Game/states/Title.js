@@ -12,10 +12,12 @@ export default class Title extends GameState {
   update(deltaTime) {
     // press any button to enter new state
 
-    if (this.game.userInput.controls["a"] == true) {
-      this.game.transitionController.transition(() => {
-        let newState = new HomeMenu();
-        newState.enterState();
+    if (this.game.userInput.controls["start"] == true) {
+      this.game.transitionController.transition({
+        midAction: () => {
+          let newState = new HomeMenu();
+          newState.enterState();
+        },
       });
     }
     // this.game.camera.update();
@@ -23,13 +25,19 @@ export default class Title extends GameState {
     this.game.userInput.resetKeys();
   }
   render(context) {
+    let x = this.game.canvas2d.width;
     // TODO create 2d context for displaying title sequences menus and such
     //threejs is handing most of the drawing but on our 2d canvas with will esparate the updating and drawing
+
+    context.save();
     context.font = "48px serif";
     context.fillStyle = "white";
-    context.fillText("My Tiny Space Ship", 20, 50);
+    context.textAlign = "center";
+
+    context.fillText("My Tiny Space Ship", x / 2, 100);
     context.font = "24px serif";
     context.fillStyle = "darkgrey";
-    context.fillText("Press Enter to start", 100, 100);
+    context.fillText("Press Start to Begin", x / 2, 150);
+    context.restore();
   }
 }
