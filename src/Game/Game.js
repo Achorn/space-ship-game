@@ -10,6 +10,7 @@ import Title from "./states/Title";
 import TransitionController from "./Utils/TransitionController";
 import GameScene from "./states/GameScene";
 import DialogState from "./states/dialog/DialogState";
+import PhysicsEngine from "./PhysicsEngine";
 
 let instance = null;
 
@@ -31,18 +32,17 @@ export default class Game {
     this.scene = new THREE.Scene();
     this.camera = new Camera();
     this.renderer = new Renderer();
+    this.ammoPhysics = new PhysicsEngine();
     this.transitionController = new TransitionController();
     this.stateStack = [];
     this.loadStates();
 
     this.debugStatement = "debug";
 
-    // Sizes resize event
     this.sizes.on("resize", () => {
       this.resize();
     });
 
-    // Time tick event
     this.time.on("tick", () => this.update());
   }
 
@@ -56,23 +56,20 @@ export default class Game {
     this.renderer.resize();
   }
   update() {
-    this.userInput.gamepadControllerInput();
-    this.userInput.updateGamepad();
+    this.userInput.update();
+
+    // this.ammoPhysics.update(this.time.delta);
 
     this.renderer.update();
 
     this.context2d.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-    this.stateStack[this.stateStack.length - 1].update(
-      this.time.delta,
-      this.userInput.controls
-    );
+    let curState = this.stateStack[this.stateStack.length - 1];
 
-    this.stateStack[this.stateStack.length - 1].render(this.context2d);
+    curState.update(this.time.delta, this.userInput.controls);
+    curState.render(this.context2d);
+
     this.transitionController.update();
-    // this.canvas2d.context.font = "24px serif";
-    // this.canvas2d.context.fillStyle = "white";
-    // this.canvas2d.context.fillText(this.game.debugStatement, 100, 400);
   }
   destroy() {}
 }

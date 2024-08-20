@@ -23,6 +23,10 @@ class TransitionController {
     fadeIntTime = 1,
     endAction = () => {},
   }) => {
+    // for debugging
+    // fadeoutTime = 0;
+    // fadeIntTime = 0;
+
     // transition in
     // this.selectedTransition = new Transition();
     this.userInput.isActive = false;

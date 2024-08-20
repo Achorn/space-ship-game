@@ -160,7 +160,7 @@ class ScoreBoard {
   }
 
   update() {
-    // check how many blocks are in play
+    this.game.ammoPhysics.update(this.game.time.delta);
     // update points
     if (this.isActive) this.checkScore();
   }
