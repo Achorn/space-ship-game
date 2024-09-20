@@ -47,6 +47,10 @@ class GenericShip extends GameEntity {
       localInertia
     );
     let body = new this.Ammo.btRigidBody(rbInfo);
+    body.threeObject = this.mesh;
+    this.mesh.userData.object = this;
+    this.mesh.userData.tag = "ship";
+    this.mesh.userData.physicsBody = body;
 
     body.setFriction(4);
     body.setRollingFriction(10);
