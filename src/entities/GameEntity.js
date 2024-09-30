@@ -10,7 +10,6 @@ class GameEntity {
     this.mass = 0;
 
     this.mesh = new Mesh();
-    this.collider;
 
     this.entityType = entityType;
     this.shouldDispose = false;

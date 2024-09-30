@@ -22,10 +22,6 @@ class Target extends GameEntity {
     this.mesh.rotation.x = (Math.random() - 0.5) * Math.PI * 2;
     this.mesh.rotation.y = (Math.random() - 0.5) * Math.PI * 2;
 
-    //TODO: remove after physics has been added
-    const collider = new THREE.Box3().setFromObject(this.mesh);
-    this.collider = collider;
-
     // PHYSICS
     let transform = new this.Ammo.btTransform();
     transform.setIdentity();
@@ -80,7 +76,11 @@ class Target extends GameEntity {
       this.shouldDispose = true;
       this.mesh.userData.shouldDispose = true;
 
-      const explosion = new ExplosionEffect(this.mesh.position, 1.8, "normal");
+      const explosion = new ExplosionEffect(
+        this.mesh.position,
+        1.8,
+        this.mesh.material
+      );
       this.gameScene.addToScene(explosion);
       this.gameScene.scoreBoard.addPoint();
     }

@@ -14,15 +14,11 @@ class Bullet extends GameEntity {
   }
 
   load = () => {
-    //mesh = ball
     this.mesh = new THREE.Mesh(
       new THREE.SphereGeometry(this.radius, 8, 8),
       new THREE.MeshBasicMaterial({ color: 0xffff00 })
     );
     this.mesh.position.copy(this.position);
-    this.collider = new THREE.Box3()
-      .setFromObject(this.mesh)
-      .getBoundingSphere(new THREE.Sphere(this.mesh.position));
 
     //ammo Physics
     let Ammo = this.game.ammoPhysics.Ammo;
@@ -66,45 +62,25 @@ class Bullet extends GameEntity {
     this.game.ammoPhysics.rigidBodies.push(this.mesh);
   };
   hit(target) {
-    // console.log(target);
     this.shouldDispose = true;
     this.mesh.userData.shouldDispose = true;
 
-    // let targetMaterial = target.userData.object.mesh.material.clone();
-    // console.log(targetMaterial);
-    //take color of target to make explosion effect??
-    // console.log(target.tag);
+    let targetMaterial = target.userData.object.mesh.material;
+    const explosion = new ExplosionEffect(
+      this.mesh.position,
+      0.8,
+      targetMaterial
+    );
+    this.gameScene.addToScene(explosion);
     if (target.userData.tag == "target") {
-      // console.log("damaging!");
       target.userData.object.damage(30);
     }
-    const explosion = new ExplosionEffect(this.mesh.position, 1);
-    this.gameScene.addToScene(explosion);
   }
   update = (deltaTime) => {
     this.game.ammoPhysics.checkContact(this.mesh.userData.physicsBody);
 
     this.existance += deltaTime;
-    // this.mesh.position.add(this.angle.multiplyScalar(this.speed * deltaTime));
-    // const colliders = this.gameScene.gameEntities.filter(
-    //   (c) =>
-    //     c.collider &&
-    //     c !== this &&
-    //     c.entityType !== "player" &&
-    //     c.collider.intersectsSphere(this.collider)
-    // );
-    //if collision detected. its no longer needed and should be removed
-    // if (colliders.length) {
-    // this.shouldDispose = true;
-    // explode!!!
-    // const explosion = new ExplosionEffect(this.mesh.position, 1);
-    // this.gameScene.addToScene(explosion);
-    //collide with target?
-    // const enemies = colliders.filter((c) => c.entityType === "target");
-    // if (enemies.length) {
-    // enemies[0].damage(30);
-    // }
-    // }
+
     if (this.existance > 1800) {
       this.shouldDispose = true;
       this.mesh.userData.shouldDispose = true;

@@ -12,10 +12,6 @@ class GenericShip extends GameEntity {
     );
     this.mesh.position.copy(position);
 
-    // TODO: WILL BE REMOVED!!!
-    const collider = new THREE.Box3().setFromObject(this.mesh);
-    this.collider = collider;
-
     // AMMO PHYSICS BABY
     let transform = new this.Ammo.btTransform();
     transform.setIdentity();
