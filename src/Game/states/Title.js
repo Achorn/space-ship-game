@@ -7,6 +7,9 @@ export default class Title extends GameState {
     super();
 
     // add stars to title
+    this.teaImage = new Image();
+    this.teaImage.src = "/tea-time-2.jpg";
+    // console.log(this.teaImage);
   }
 
   update(deltaTime) {
@@ -39,5 +42,8 @@ export default class Title extends GameState {
     context.fillStyle = "darkgrey";
     context.fillText("Press Start to Begin", x / 2, 150);
     context.restore();
+
+    if (this.teaImage.complete)
+      context.drawImage(this.teaImage, 10, 10, 5 * 150, 4 * 150);
   }
 }
