@@ -3,9 +3,9 @@ import GameEntity from "../entities/GameEntity";
 import { randomIntInRange, randomSin } from "../utils/MathUtils";
 
 class ExplosionEffect extends GameEntity {
-  constructor(position, size, type) {
+  constructor(position, size, material) {
     super(position, "general");
-    this.type = type;
+    this.material = material;
     this.size = size;
     this.effectDuration = 0.4;
     this.currentDuration = this.effectDuration;
@@ -16,10 +16,9 @@ class ExplosionEffect extends GameEntity {
   load = () => {
     const particleGeometry = new THREE.DodecahedronGeometry(this.size, 0);
     const totalParticles = randomIntInRange(7, 13);
-    const fireMaterial =
-      this.type == "normal"
-        ? new THREE.MeshNormalMaterial({})
-        : new THREE.MeshPhongMaterial({ color: 0xff4500 });
+    const fireMaterial = this.material
+      ? this.material
+      : new THREE.MeshPhongMaterial({ color: 0xff4500 });
 
     for (let i = 0; i < totalParticles; i++) {
       const particleAngle = Math.random() * Math.PI * 2;

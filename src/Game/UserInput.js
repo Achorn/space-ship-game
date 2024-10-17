@@ -9,6 +9,10 @@ export default class UserInput {
     this.controllerIndex = null;
     this.previousGamepadButtons = null;
   }
+  update() {
+    this.gamepadControllerInput();
+    this.updateGamepad();
+  }
 
   setListeners() {
     //set up gamepad connections
