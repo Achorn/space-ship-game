@@ -11,6 +11,7 @@ import TransitionController from "./Utils/TransitionController";
 import GameScene from "./states/GameScene";
 import DialogState from "./states/dialog/DialogState";
 import PhysicsEngine from "./PhysicsEngine";
+import Stats from "stats.js";
 
 let instance = null;
 
@@ -37,6 +38,10 @@ export default class Game {
     this.stateStack = [];
     this.loadStates();
 
+    // this.stats = new Stats();
+    // this.stats.showPanel(0);
+    // document.body.appendChild(this.stats.dom);
+
     this.debugStatement = "debug";
 
     this.sizes.on("resize", () => {
@@ -56,6 +61,8 @@ export default class Game {
     this.renderer.resize();
   }
   update() {
+    // this.stats.begin();
+
     this.userInput.update();
 
     // this.ammoPhysics.update(this.time.delta);
@@ -70,6 +77,7 @@ export default class Game {
     curState.render(this.context2d);
 
     this.transitionController.update();
+    // this.stats.end();
   }
   destroy() {}
 }
