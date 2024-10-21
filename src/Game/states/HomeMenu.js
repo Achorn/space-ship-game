@@ -15,7 +15,7 @@ class HomeMenu extends GameState {
             midAction: () => {
               new GameScene().enterState();
             },
-            fadeIntTime: 1.5,
+            fadeInTime: 1.5,
             endAction: () => {
               new DialogState({
                 script: [

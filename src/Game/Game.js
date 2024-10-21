@@ -10,6 +10,7 @@ import Title from "./states/Title";
 import TransitionController from "./Utils/TransitionController";
 import GameScene from "./states/GameScene";
 import DialogState from "./states/dialog/DialogState";
+import EndCredits from "./states/EndCredits";
 
 let instance = null;
 
@@ -47,6 +48,8 @@ export default class Game {
   }
 
   loadStates() {
+    // this.endCredits = new EndCredits();
+    // this.stateStack.push(this.endCredits);
     this.titleScreen = new Title();
     this.stateStack.push(this.titleScreen);
   }

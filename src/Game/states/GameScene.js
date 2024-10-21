@@ -7,6 +7,7 @@ import PlayerShip from "../World/PlayerShip";
 import TargetLoader from "./gameScene/targetLoader";
 import DialogState from "./dialog/DialogState";
 import Game from "../Game";
+import EndCredits from "./EndCredits";
 
 class GameScene extends GameState {
   constructor() {
@@ -202,13 +203,11 @@ class ScoreBoard {
         ],
         dialogFinishedAction: () => {
           this.game.transitionController.transition({
-            fadeIntTime: 3,
+            fadeoutTime: 2,
+            fadeInTime: 5,
             midAction: () => {
-              while (this.game.stateStack.length > 1) {
-                this.game.stateStack[
-                  this.game.stateStack.length - 1
-                ].exitState();
-              }
+              let endCredits = new EndCredits();
+              this.game.stateStack.push(endCredits);
             },
           });
         },
