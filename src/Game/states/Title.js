@@ -25,7 +25,7 @@ export default class Title extends GameState {
     this.game.userInput.resetKeys();
   }
   render(context) {
-    let x = this.game.canvas2d.width;
+    let canvWidth = this.game.canvas2d.width;
     // TODO create 2d context for displaying title sequences menus and such
     //threejs is handing most of the drawing but on our 2d canvas with will esparate the updating and drawing
 
@@ -34,10 +34,10 @@ export default class Title extends GameState {
     context.fillStyle = "white";
     context.textAlign = "center";
 
-    context.fillText("My Tiny Space Ship", x / 2, 100);
+    context.fillText("My Tiny Space Ship", canvWidth / 2, 100);
     context.font = "24px serif";
     context.fillStyle = "darkgrey";
-    context.fillText("Press Start to Begin", x / 2, 150);
+    context.fillText("Press Start to Begin", canvWidth / 2, 150);
     context.restore();
   }
 }
