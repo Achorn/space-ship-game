@@ -20,7 +20,7 @@ class TransitionController {
   transition = ({
     fadeoutTime = 1,
     midAction = () => {},
-    fadeIntTime = 1,
+    fadeInTime = 1,
     endAction = () => {},
   }) => {
     // for debugging
@@ -38,7 +38,7 @@ class TransitionController {
         midAction();
         gsap.to(this.options, {
           alpha: 0,
-          duration: fadeIntTime,
+          duration: fadeInTime,
           ease: "circ.out",
           onComplete: () => {
             this.userInput.isActive = true;
