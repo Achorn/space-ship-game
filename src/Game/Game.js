@@ -12,6 +12,7 @@ import GameScene from "./states/GameScene";
 import DialogState from "./states/dialog/DialogState";
 import PhysicsEngine from "./PhysicsEngine";
 import Stats from "stats.js";
+import sfx from "./World/SoundController";
 
 let instance = null;
 
@@ -36,6 +37,7 @@ export default class Game {
     this.ammoPhysics = new PhysicsEngine();
     this.transitionController = new TransitionController();
     this.stateStack = [];
+    this.sounds = sfx;
     this.loadStates();
 
     // this.stats = new Stats();

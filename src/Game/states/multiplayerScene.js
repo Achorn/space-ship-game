@@ -8,28 +8,88 @@ import TargetLoader from "./gameScene/targetLoader";
 import DialogState from "./dialog/DialogState";
 import Game from "../Game";
 import EndCredits from "./EndCredits";
+import { io } from "socket.io-client";
+const URL = `http://${window.location.hostname}:3000`;
+console.log(URL);
+import * as THREE from "three";
 
 // i assume this is the actual play part of the game
-class GameScene extends GameState {
+//god guide me
+// the mountains are beautiful, and the wind blows through the grass.
+// may i create something beautiful for others that come after me.
+// this is an art. not just numbers on a screen, but an idea. sweat and tears.
+// a climb that takes more than a day. more than a week, a month or a year, but it is a daily journey.
+// but also one that requires rest, relaxations and time away. I am back and i am energized. lets get multiplayer in this story
+// I might be coding this alone, but i cant do this alone. i need the help from my friends. a life filled with love takes a village.
+// you are no exception
+
+// thank you to my friends who have supported my. especially McKinley.
+class GameSceneMultiplayer extends GameState {
   constructor() {
     super();
     this.init();
+    this.socket;
   }
   init() {
+    this.clientShips = {};
+    this.selfID;
+
+    this.socket = io(URL);
+
+    this.socket.on("connect", () => {
+      this.selfID = this.socket.id;
+
+      console.log("connected!");
+      this.socket.emit("newPlayer", this.controls.position);
+    });
+    this.socket.on("posUpdates", (players) => {
+      let playersFound = {};
+      for (let id in players) {
+        //check for new SHIP
+        if (this.clientShips[id] === undefined && id !== this.socket.id) {
+          this.addNewClientShip(id);
+        }
+        playersFound[id] = true;
+      }
+      //delete non ships
+      for (let id in this.clientShips) {
+        if (!playersFound[id]) {
+          console.log("removing ship!");
+          // handle removal later!
+          // this.removeNewClientShip(id);
+        }
+        // update ship position?
+        for (let id in players) {
+          if (this.clientShips[id] !== undefined && id !== this.selfID) {
+            this.updateClientShip(id, players);
+          }
+        }
+      }
+
+      for (let id in players) {
+      }
+    });
+    //connect to client
+    // ... thats kind of it
+
+    //backend
     this.gameEntities = [];
     this.world = new World(this);
+    this.bulletSpeedFactor = 1.4;
+
+    //Frontend
     this.playerShip = new PlayerShip();
     this.game.camera.ship = this.playerShip;
-    new TargetLoader(this); //call once and then it dissapears???
-    this.bullets = [];
-    this.bulletSpeedFactor = 1.4;
-    this.gameEntities.push(this.playerShip);
-
     this.controls = new BasicShipController(this.playerShip.instance, this);
     this.thirdPersonCamera = new ThirdPersonShipCamera(
       this.game.camera.instance,
       this.controls
     );
+    //both
+    this.bullets = [];
+    new TargetLoader(this); //call once and then it dissapears???
+
+    this.gameEntities.push(this.playerShip);
     this.scoreBoard = new ScoreBoard(
       this.gameEntities.filter(
         (entity) => entity.entityType === "target"
@@ -38,6 +98,12 @@ class GameScene extends GameState {
   }
 
   update(deltaTime) {
+    this.socket.emit(
+      "clientUpdateSelf",
+      this.controls.position
+      // y: this.playerShip.position.y,
+      // z: this.playerShip.position.z,
+    );
     this.disposeEntities();
     //check for state change
 
@@ -92,30 +158,13 @@ class GameScene extends GameState {
   };
 
   render(context) {
-    // Draw blue triangle
-    // context.save();
-    // context.beginPath();
-    // context.fillStyle = "blue";
-    // context.moveTo(20, 20);
-    // context.lineTo(180, 20);
-    // context.lineTo(130, 130);
-    // context.closePath();
-    // context.fill();
-    // context.textAlign = "start";
-
-    // context.font = "48px serif";
-    // context.fillStyle = "green";
-    // context.fillText("FUN GAMEPLAY", 50, 100);
-
-    // context.font = "24px serif";
-    // context.fillStyle = "blue";
-    // context.fillText("press 'start' to pause", 100, 200);
-    // context.restore();
-
     this.scoreBoard.draw(context);
   }
-
+  enterState() {
+    super.enterState();
+  }
   exitState() {
+    this.socket.disconnect();
     super.exitState();
     this.cleanUp();
   }
@@ -131,6 +180,12 @@ class GameScene extends GameState {
     this.game.scene.remove(this.playerShip.instance);
     this.playerShip.geometry.dispose();
     this.playerShip.material.dispose();
+
+    Object.values(this.clientShips).forEach((mesh) => {
+      this.game.scene.remove(mesh);
+      mesh.geometry.dispose();
+      mesh.material.dispose();
+    });
 
     //remove all ships,
     this.world.ships.cleanUp();
@@ -150,8 +205,31 @@ class GameScene extends GameState {
     this.world.sphereBoundary.instance.geometry.dispose();
     this.world.sphereBoundary.instance.material.dispose();
   }
+  addNewClientShip(id) {
+    let geometry = new THREE.BoxGeometry(0.4, 0.4, 0.4);
+    let material = new THREE.MeshStandardMaterial({ color: "red" });
+    let mesh = new THREE.Mesh(geometry, material);
+
+    console.log("adding new ship!");
+    let newShip = mesh;
+    this.clientShips[id] = newShip;
+    this.game.scene.add(newShip);
+    // this.gameEntities.push(newShip);
+  }
+  // TODO fix removing client. just do it with socketio
+  removeNewClientShip(id) {
+    console.log("removing client ship!");
+    this.clientShips[id].remove();
+    delete this.clientShips[id];
+    this.game.scene.remove(this.clientShips[id].mesh);
+    this.clientShips[id].dispose();
+  }
+  updateClientShip(id, players) {
+    let curShip = this.clientShips[id];
+    curShip.position.set(players[id].x, players[id].y, players[id].z);
+  }
 }
-export default GameScene;
+export default GameSceneMultiplayer;
 
 class ScoreBoard {
   constructor(totalScore) {

@@ -2,6 +2,7 @@ import GameState from "./GameState";
 import GameScene from "./GameScene";
 import Menu from "../../ui/menu";
 import OptionsMenu from "./OptionsMenu";
+import GameSceneMultiplayer from "./multiplayerScene";
 import DialogState from "./dialog/DialogState";
 
 class HomeMenu extends GameState {
@@ -35,6 +36,10 @@ class HomeMenu extends GameState {
             },
           });
         },
+      },
+      {
+        name: "multiplayer",
+        action: () => new GameSceneMultiplayer().enterState(),
       },
       { name: "options", action: () => new OptionsMenu().enterState() },
       {

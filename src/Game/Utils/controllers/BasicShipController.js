@@ -28,7 +28,7 @@ export default class BasicShipController {
     this.pitchVelocity = 0;
     this.turnVelocity = 0;
 
-    this.planeSpeed = 0.05;
+    this.planeSpeed = 0.01;
     this.speedModifier = 0.03;
 
     //guns variables

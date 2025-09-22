@@ -4,18 +4,23 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev:server": "nodemon server.js",
+    "dev:client": "vite",
     "build": "vite build",
     "deploy": "vercel --prod"
   },
   "devDependencies": {
+    "nodemon": "^3.1.10",
     "vite": "^5.2.0"
   },
   "dependencies": {
     "ammo.js": "github:kripken/ammo.js",
+    "express": "^5.1.0",
     "gsap": "^3.12.5",
     "howler": "^2.2.4",
     "lil-gui": "^0.19.2",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "stats.js": "^0.17.0",
     "three": "^0.164.1",
     "vercel": "^34.2.3"

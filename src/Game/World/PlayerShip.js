@@ -3,11 +3,12 @@ import Game from "../Game";
 import * as THREE from "three";
 
 class PlayerShip extends GameEntity {
-  constructor() {
+  constructor(color = "orange") {
     super(new THREE.Vector3(0, 0, 0), "player");
     this.scene = this.game.scene;
 
     // variables
+    this.color = color;
     this.speed = 0.01;
     this.matrix;
     this.x = new THREE.Vector3(1, 0, 0);
@@ -35,7 +36,9 @@ class PlayerShip extends GameEntity {
     // this.geometry = new THREE.SphereGeometry(0.4);
   }
   setMaterials() {
-    this.material = new THREE.MeshStandardMaterial({ color: "orange" });
+    this.material = new THREE.MeshStandardMaterial({
+      color: this.color,
+    });
   }
   setMesh() {
     this.instance = new THREE.Mesh(this.geometry, this.material);

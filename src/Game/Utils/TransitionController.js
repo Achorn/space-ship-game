@@ -24,7 +24,7 @@ class TransitionController {
     endAction = () => {},
   }) => {
     // for debugging
-    // fadeoutTime = 0;
+    fadeoutTime = 0;
     // fadeIntTime = 0;
 
     // transition in

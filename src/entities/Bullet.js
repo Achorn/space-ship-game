@@ -1,6 +1,7 @@
 import ExplosionEffect from "../effects/ExplosionEffect";
 import GameEntity from "./GameEntity";
 import * as THREE from "three";
+
 class Bullet extends GameEntity {
   constructor(position, angle, gameScene) {
     super(position, "bullet");
@@ -60,6 +61,7 @@ class Bullet extends GameEntity {
     this.mesh.userData.object = this;
     this.mesh.userData.tag = "bullet";
     this.game.ammoPhysics.rigidBodies.push(this.mesh);
+    // this.game.sounds.lazer.play();
   };
   hit(target) {
     this.shouldDispose = true;

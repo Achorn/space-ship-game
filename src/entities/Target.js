@@ -75,7 +75,7 @@ class Target extends GameEntity {
     if (this.life <= 0) {
       this.shouldDispose = true;
       this.mesh.userData.shouldDispose = true;
-
+      this.game.sounds.explosion.play();
       const explosion = new ExplosionEffect(
         this.mesh.position,
         1.8,
@@ -83,6 +83,8 @@ class Target extends GameEntity {
       );
       this.gameScene.addToScene(explosion);
       this.gameScene.scoreBoard.addPoint();
+    } else {
+      this.game.sounds.impact.play();
     }
   }
   dispose = () => {

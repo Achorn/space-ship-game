@@ -1,11 +1,11 @@
 import GameState from "./GameState";
 import GameScene from "./GameScene";
 import HomeMenu from "./HomeMenu";
+import { Howl } from "howler";
 
 export default class Title extends GameState {
   constructor() {
     super();
-
     // add stars to title
   }
 
