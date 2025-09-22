@@ -9,7 +9,7 @@ import DialogState from "./dialog/DialogState";
 import Game from "../Game";
 import EndCredits from "./EndCredits";
 import { io } from "socket.io-client";
-const URL = `http://${window.location.hostname}:3000`;
+const URL = `https://${window.location.hostname}:3000`;
 console.log(URL);
 import * as THREE from "three";
 
