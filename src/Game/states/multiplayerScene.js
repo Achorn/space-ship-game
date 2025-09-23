@@ -9,8 +9,10 @@ import DialogState from "./dialog/DialogState";
 import Game from "../Game";
 import EndCredits from "./EndCredits";
 import { io } from "socket.io-client";
-const URL = `https://${window.location.hostname}`;
-console.log(URL);
+// const URL = `http://localhost:3000`; local
+const URL = `https://${window.location.hostname}`; //prod
+
+// console.log(URL);
 import * as THREE from "three";
 
 // i assume this is the actual play part of the game
@@ -43,34 +45,33 @@ class GameSceneMultiplayer extends GameState {
       this.socket.emit("newPlayer", this.controls.position);
     });
     this.socket.on("posUpdates", (players) => {
-      let playersFound = {};
       for (let id in players) {
-        //check for new SHIP
-        if (this.clientShips[id] === undefined && id !== this.socket.id) {
-          this.addNewClientShip(id);
+        if (this.clientShips[id] !== undefined && id !== this.selfID) {
+          this.updateClientShip(id, players);
         }
-        playersFound[id] = true;
-      }
-      //delete non ships
-      for (let id in this.clientShips) {
-        if (!playersFound[id]) {
-          console.log("removing ship!");
-          // handle removal later!
-          // this.removeNewClientShip(id);
-        }
-        // update ship position?
-        for (let id in players) {
-          if (this.clientShips[id] !== undefined && id !== this.selfID) {
-            this.updateClientShip(id, players);
-          }
-        }
-      }
-
-      for (let id in players) {
       }
     });
     //connect to client
     // ... thats kind of it
+    this.socket.on("newPlayer", (data) => {
+      let id = data.id;
+      if (id === this.selfID) return;
+      console.log("new player");
+      this.addNewClientShip(id);
+    });
+    this.socket.on("existingPlayers", (players) => {
+      console.log("adding existing players");
+      for (let id in players) {
+        if (id !== this.selfID) {
+          this.addNewClientShip(id);
+        }
+      }
+    });
+    this.socket.on("playerLeave", (id) => {
+      console.log("player left: ", id);
+      //remove from player list.
+      this.removeNewClientShip(id);
+    });
 
     //backend
     this.gameEntities = [];
@@ -219,10 +220,13 @@ class GameSceneMultiplayer extends GameState {
   // TODO fix removing client. just do it with socketio
   removeNewClientShip(id) {
     console.log("removing client ship!");
-    this.clientShips[id].remove();
+    let mesh = this.clientShips[id];
+    console.log(mesh);
+    this.game.scene.remove(mesh);
+    mesh.geometry.dispose();
+    mesh.material.dispose(); // this.clientShips[id].dispose();
+    // this.clientShips[id].remove();
     delete this.clientShips[id];
-    this.game.scene.remove(this.clientShips[id].mesh);
-    this.clientShips[id].dispose();
   }
   updateClientShip(id, players) {
     let curShip = this.clientShips[id];

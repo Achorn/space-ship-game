@@ -30,16 +30,20 @@ setInterval(serverLoop, 1000 / 60);
 function connected(socket) {
   socket.on("newPlayer", (data) => {
     console.log("🥳 New client connected, id: " + socket.id);
+    socket.emit("existingPlayers", players);
     players[socket.id] = data;
     console.log("#️⃣ Current number of players: " + Object.keys(players).length);
     console.log("players dictionary: ", players);
-    io.emit("updatePlayers", players);
+    socket.broadcast.emit("newPlayer", { id: socket.id, playerPos: data });
+    // io.emit("updatePlayers", players);
   });
+
   socket.on("disconnect", function () {
     delete players[socket.id];
     console.log("Goodbye client with id " + socket.id);
     console.log("Current number of players: " + Object.keys(players).length);
-    io.emit("updatePlayers", players);
+    // io.emit("updatePlayers", players);
+    socket.broadcast.emit("playerLeave", socket.id);
   });
   socket.on("userCommands", (data) => {
     console.log(data);
