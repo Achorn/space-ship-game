@@ -9,7 +9,7 @@ import DialogState from "./dialog/DialogState";
 import Game from "../Game";
 import EndCredits from "./EndCredits";
 import { io } from "socket.io-client";
-// const URL = `http://localhost:3000`; local
+// const URL = `http://localhost:3000`; // local;
 const URL = `https://${window.location.hostname}`; //prod
 
 // console.log(URL);
@@ -101,7 +101,10 @@ class GameSceneMultiplayer extends GameState {
   update(deltaTime) {
     this.socket.emit(
       "clientUpdateSelf",
-      this.controls.position
+      {
+        position: this.controls.position,
+        matrix: this.controls.matrix,
+      }
       // y: this.playerShip.position.y,
       // z: this.playerShip.position.z,
     );
@@ -224,13 +227,22 @@ class GameSceneMultiplayer extends GameState {
     console.log(mesh);
     this.game.scene.remove(mesh);
     mesh.geometry.dispose();
-    mesh.material.dispose(); // this.clientShips[id].dispose();
+    mesh.material.dispose();
     // this.clientShips[id].remove();
     delete this.clientShips[id];
+    mesh = null;
   }
   updateClientShip(id, players) {
+    // get matrix
     let curShip = this.clientShips[id];
+    let { position, matrix } = players[id];
+    curShip.matrixAutoUpdate = false;
+    curShip.matrix.copy(matrix);
+    // curShip.position.x = position.x;
     curShip.position.set(players[id].x, players[id].y, players[id].z);
+    // curShip.position.y = position.y;
+    // curShip.position.z = position.z;
+    curShip.matrixWorldNeedsUpdate = true;
   }
 }
 export default GameSceneMultiplayer;
