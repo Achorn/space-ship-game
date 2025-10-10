@@ -4,7 +4,7 @@ import * as THREE from "three";
 
 class PlayerShip extends GameEntity {
   constructor(color = "orange") {
-    super(new THREE.Vector3(0, 0, 0), "player");
+    super(new THREE.Vector3(0, 2, 20), "player");
     this.scene = this.game.scene;
 
     // variables
@@ -31,6 +31,18 @@ class PlayerShip extends GameEntity {
     this.planeSpeed = 0.03;
     this.speedModifier = 0.03;
   }
+
+  get Position() {
+    return this.planePosition;
+  }
+  get Rotation() {
+    return this.rotMatrix;
+    // if (!this.target) {
+    //   return new THREE.Quaternion();
+    // }
+    // return this.target.quaternion;
+  }
+
   setGeometry() {
     this.geometry = new THREE.BoxGeometry(0.4, 0.4, 0.4);
     // this.geometry = new THREE.SphereGeometry(0.4);
@@ -50,7 +62,20 @@ class PlayerShip extends GameEntity {
     );
   }
 
+  updatePosition(backendPlayer) {
+    console.log("updating?");
+    // let { position, matrix } = players[id];
+    this.instance.matrixAutoUpdate = false;
+    this.matrix.copy(backendPlayer.matrix);
+    this.position.set(backendPlayer.x, backendPlayer.y, backendPlayer.z);
+    this.matrixWorldNeedsUpdate = true;
+  }
   draw() {}
+  dispose() {
+    this.game.scene.remove(this.instance);
+    this.instance.geometry.dispose();
+    this.instance.material.dispose();
+  }
 }
 
 export default PlayerShip;

@@ -1,7 +1,10 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
+import * as THREE from "three";
 
 import app from "./app.js";
+import ShipController from "./src/server/controller/ShipController.js";
+
 const server = createServer(app); // Use http.createServer for WebSocket integration
 const io = new Server(server, {
   cors: {
@@ -10,71 +13,57 @@ const io = new Server(server, {
 });
 const port = process.env.PORT || 3000;
 
-let players = {};
-let serverBalls = {};
+const backEndPlayers = {};
+const backEndProjectiles = {};
+const backEndShipControllers = {};
+const backendShipInputs = {};
 
-io.on("connection", connected);
-
-const serverLoop = () => {
-  //   userInteraction();
-  // physicsLoop();
-  // for (let id in serverBalls) {
-  //   playerPos[id].x = serverBalls[id].pos.x;
-  //   playerPos[id].y = serverBalls[id].pos.y;
-  // }
-  io.emit("positionsUpdate", players);
-};
-setInterval(serverLoop, 1000 / 60);
-
-//listening to events after the connection is estalished
-function connected(socket) {
-  socket.on("newPlayer", (data) => {
+//SERVER
+io.on("connection", (socket) => {
+  socket.on("newPlayer", (input) => {
     console.log("🥳 New client connected, id: " + socket.id);
-    socket.emit("existingPlayers", players);
-    players[socket.id] = data;
-    console.log("#️⃣ Current number of players: " + Object.keys(players).length);
-    console.log("players dictionary: ", players);
-    socket.broadcast.emit("newPlayer", { id: socket.id, playerPos: data });
-    // io.emit("updatePlayers", players);
+
+    let x = 0;
+    let y = 2;
+    let z = 20;
+
+    backEndPlayers[socket.id] = {
+      position: { x, y, z },
+      matrix: new THREE.Matrix4().makeBasis(x, y, z),
+    };
+    backEndShipControllers[socket.id] = new ShipController();
+    backendShipInputs[socket.id] = input;
+
+    console.log(
+      "#️⃣ Current number of players: " + Object.keys(backEndPlayers).length
+    );
   });
 
-  socket.on("disconnect", function () {
-    delete players[socket.id];
+  socket.on("disconnect", () => {
+    delete backEndPlayers[socket.id];
+    delete backEndShipControllers[socket.id];
     console.log("Goodbye client with id " + socket.id);
-    console.log("Current number of players: " + Object.keys(players).length);
+    console.log(
+      "Current number of players: " + Object.keys(backEndPlayers).length
+    );
     // io.emit("updatePlayers", players);
     socket.broadcast.emit("playerLeave", socket.id);
   });
-  socket.on("userCommands", (data) => {
-    console.log(data);
-    console("handle user commands soon");
-  });
 
-  socket.on("ClientClientHello", (data) => {
-    socket.broadcast.emit("ServerClientHello", data);
+  socket.on("clientUpdateSelf", (input) => {
+    backendShipInputs[socket.id] = input;
+    //   //update players using keydown event in the near future
   });
+});
 
-  socket.on("clientUpdateSelf", (data) => {
-    // console.log(data);
-    players[socket.id] = data;
-    socket.broadcast.emit("posUpdates", players);
-  });
-}
+setInterval(() => {
+  for (const id in backEndPlayers) {
+    let backEndPlayer = backEndPlayers[id];
+    backEndShipControllers[id].update(backEndPlayer, backendShipInputs[id]);
+  }
+  io.emit("updatePlayers", backEndPlayers);
+}, 15);
+
 server.listen(port, () => {
   console.log(`server running at http://localhost:${port}`);
 });
-
-// game class
-// start
-// end
-
-// we dont need physics right now.. we just need to move the way we control ships
-class AuthServerWorld {
-  constructor() {}
-  init() {
-    //create playground 1
-    // add physics
-    // add add 60 fps loop
-    // add  players
-  }
-}

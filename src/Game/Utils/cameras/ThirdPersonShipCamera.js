@@ -11,45 +11,57 @@ export default class ThirdPersonShipCamera {
 
   calculateIdealOffset() {
     const idealOffset = new THREE.Vector3(10, 30, -40);
+    let rotMatrix = { ...this.target.matrix };
+    rotMatrix.elements[12] = 0;
+    rotMatrix.elements[13] = 0;
+    rotMatrix.elements[14] = 0;
 
-    idealOffset.applyQuaternion(this.target.Rotation);
+    idealOffset.applyQuaternion(rotMatrix);
 
-    return idealOffset.add(this.target.Position);
+    return idealOffset.add(this.target.position);
   }
   calculateIdealLookat() {
     const idealLookat = new THREE.Vector3(10, 10, 50);
-    idealLookat.applyQuaternion(this.target.Rotation);
+    let rotMatrix = { ...this.target.matrix };
+    rotMatrix.elements[12] = 0;
+    rotMatrix.elements[13] = 0;
+    rotMatrix.elements[14] = 0;
 
-    return idealLookat.add(this.target.Position);
+    idealLookat.applyQuaternion(rotMatrix);
+
+    return idealLookat.add(this.target.position);
   }
 
   update(timeElapsed) {
+    if (!this.target) return;
     const idealOffset = this.calculateIdealOffset();
     const idealLookat = this.calculateIdealLookat();
     // let t = 1.0;
     // t -= Math.pow(0.001, timeElapsed);
 
-    // console.log(idealOffset, idealLookat);
     // this.currentPosition.lerp(idealOffset, t);
     // this.currentLookat.lerp(idealLookat, t);
     this.camera.position.copy(idealOffset);
 
-    // console.log(this.camera.position);
     this.camera.lookAt(idealLookat);
-    // console.log(idealLookat);
     // TODO decouple hardcoded third person camera controls
     // // {
+    let rotMatrix = { ...this.target.matrix };
+    rotMatrix.elements[12] = 0;
+    rotMatrix.elements[13] = 0;
+    rotMatrix.elements[14] = 0;
+
     const cameraMatrix = new THREE.Matrix4()
       // place camera in center of player ship
       .multiply(
         new THREE.Matrix4().makeTranslation(
-          this.target.planePosition.x,
-          this.target.planePosition.y,
-          this.target.planePosition.z
+          this.target.position.x,
+          this.target.position.y,
+          this.target.position.z
         )
       )
       // player rotation matrix
-      .multiply(this.target.rotMatrix)
+      .multiply(rotMatrix)
       // angle camera down a little
       .multiply(new THREE.Matrix4().makeRotationX(-0.1))
       // pull camera behind player target

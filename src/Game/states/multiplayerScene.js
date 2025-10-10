@@ -14,6 +14,7 @@ const URL = `https://${window.location.hostname}`; //prod
 
 // console.log(URL);
 import * as THREE from "three";
+import BasicCharacterControllerInput from "../Utils/BasicCharacterControllerInput";
 
 // i assume this is the actual play part of the game
 //god guide me
@@ -34,43 +35,39 @@ class GameSceneMultiplayer extends GameState {
   }
   init() {
     this.clientShips = {};
-    this.selfID;
 
     this.socket = io(URL);
 
     this.socket.on("connect", () => {
-      this.selfID = this.socket.id;
-
       console.log("connected!");
-      this.socket.emit("newPlayer", this.controls.position);
+      this.socket.emit("newPlayer", this.input.keys);
     });
     this.socket.on("posUpdates", (players) => {
+      console.log(players);
       for (let id in players) {
-        if (this.clientShips[id] !== undefined && id !== this.selfID) {
+        if (this.clientShips[id] !== undefined && id !== this.socket.id) {
           this.updateClientShip(id, players);
         }
       }
     });
-    //connect to client
-    // ... thats kind of it
-    this.socket.on("newPlayer", (data) => {
-      let id = data.id;
-      if (id === this.selfID) return;
-      console.log("new player");
-      this.addNewClientShip(id);
-    });
-    this.socket.on("existingPlayers", (players) => {
-      console.log("adding existing players");
-      for (let id in players) {
-        if (id !== this.selfID) {
+    this.socket.on("updatePlayers", (backEndPlayers) => {
+      for (const id in backEndPlayers) {
+        const backEndPlayer = backEndPlayers[id];
+        // player doesnt exist yet
+        if (!this.clientShips[id]) {
+          console.log("player doesnt exist yet", id);
           this.addNewClientShip(id);
+        } else {
+          // update existing player
+          this.updateClientShip(id, backEndPlayer);
         }
       }
-    });
-    this.socket.on("playerLeave", (id) => {
-      console.log("player left: ", id);
-      //remove from player list.
-      this.removeNewClientShip(id);
+      //player no longer exists in the backend
+      for (const id in this.clientShips) {
+        if (!backEndPlayers[id]) {
+          this.removeNewClientShip(id);
+        }
+      }
     });
 
     //backend
@@ -79,35 +76,21 @@ class GameSceneMultiplayer extends GameState {
     this.bulletSpeedFactor = 1.4;
 
     //Frontend
-    this.playerShip = new PlayerShip();
-    this.game.camera.ship = this.playerShip;
-    this.controls = new BasicShipController(this.playerShip.instance, this);
+    this.input = new BasicCharacterControllerInput(
+      this.game.userInput.controls
+    );
+    this.playerShip;
     this.thirdPersonCamera = new ThirdPersonShipCamera(
       this.game.camera.instance,
-      this.controls
+      this.playerShip
     );
-    //both
     this.bullets = [];
     new TargetLoader(this); //call once and then it dissapears???
-
-    this.gameEntities.push(this.playerShip);
-    this.scoreBoard = new ScoreBoard(
-      this.gameEntities.filter(
-        (entity) => entity.entityType === "target"
-      ).length
-    );
   }
 
   update(deltaTime) {
-    this.socket.emit(
-      "clientUpdateSelf",
-      {
-        position: this.controls.position,
-        matrix: this.controls.matrix,
-      }
-      // y: this.playerShip.position.y,
-      // z: this.playerShip.position.z,
-    );
+    this.input.update();
+    this.socket.emit("clientUpdateSelf", this.input.keys);
     this.disposeEntities();
     //check for state change
 
@@ -135,10 +118,7 @@ class GameSceneMultiplayer extends GameState {
 
     this.game.camera.update();
     this.world.update(deltaTime);
-    this.controls.update(deltaTime);
     this.thirdPersonCamera.update(deltaTime);
-
-    this.scoreBoard.update();
   }
 
   addToScene = (entity) => {
@@ -161,9 +141,7 @@ class GameSceneMultiplayer extends GameState {
     ];
   };
 
-  render(context) {
-    this.scoreBoard.draw(context);
-  }
+  render(context) {}
   enterState() {
     super.enterState();
   }
@@ -179,11 +157,6 @@ class GameSceneMultiplayer extends GameState {
       this.game.scene.remove(entity.mesh);
       entity.dispose();
     });
-    // remove single player ship
-
-    this.game.scene.remove(this.playerShip.instance);
-    this.playerShip.geometry.dispose();
-    this.playerShip.material.dispose();
 
     Object.values(this.clientShips).forEach((mesh) => {
       this.game.scene.remove(mesh);
@@ -211,37 +184,45 @@ class GameSceneMultiplayer extends GameState {
   }
   addNewClientShip(id) {
     let geometry = new THREE.BoxGeometry(0.4, 0.4, 0.4);
-    let material = new THREE.MeshStandardMaterial({ color: "red" });
+    let material = new THREE.MeshStandardMaterial({
+      color: this.socket.id == id ? "orange" : "red",
+    });
     let mesh = new THREE.Mesh(geometry, material);
-
-    console.log("adding new ship!");
     let newShip = mesh;
-    this.clientShips[id] = newShip;
     this.game.scene.add(newShip);
+    this.clientShips[id] = newShip;
+    if (this.socket.id === id) this.thirdPersonCamera.target = newShip;
+    console.log("adding new ship!");
+
+    //self
+    // if (id === this.socket.id) {
+    // let newShip = this.playerShip;
+    // this.thirdPersonCamera.target = newShip;
+    // this.clientShips[id] = newShip;
+
+    //other player
+    // } else {
+    // let newShip = new PlayerShip("red");
     // this.gameEntities.push(newShip);
+    // }
   }
+
   // TODO fix removing client. just do it with socketio
   removeNewClientShip(id) {
     console.log("removing client ship!");
     let mesh = this.clientShips[id];
-    console.log(mesh);
     this.game.scene.remove(mesh);
     mesh.geometry.dispose();
     mesh.material.dispose();
-    // this.clientShips[id].remove();
     delete this.clientShips[id];
     mesh = null;
   }
-  updateClientShip(id, players) {
-    // get matrix
+  updateClientShip(id, backendPlayer) {
     let curShip = this.clientShips[id];
-    let { position, matrix } = players[id];
+    let { position, matrix } = backendPlayer;
     curShip.matrixAutoUpdate = false;
     curShip.matrix.copy(matrix);
-    // curShip.position.x = position.x;
-    curShip.position.set(players[id].x, players[id].y, players[id].z);
-    // curShip.position.y = position.y;
-    // curShip.position.z = position.z;
+    curShip.position.set(position.x, position.y, position.z);
     curShip.matrixWorldNeedsUpdate = true;
   }
 }
