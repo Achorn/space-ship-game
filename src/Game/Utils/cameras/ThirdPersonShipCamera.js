@@ -11,23 +11,14 @@ export default class ThirdPersonShipCamera {
 
   calculateIdealOffset() {
     const idealOffset = new THREE.Vector3(10, 30, -40);
-    let rotMatrix = { ...this.target.matrix };
-    rotMatrix.elements[12] = 0;
-    rotMatrix.elements[13] = 0;
-    rotMatrix.elements[14] = 0;
-
-    idealOffset.applyQuaternion(rotMatrix);
+    idealOffset.applyQuaternion(this.target.matrix);
 
     return idealOffset.add(this.target.position);
   }
   calculateIdealLookat() {
     const idealLookat = new THREE.Vector3(10, 10, 50);
-    let rotMatrix = { ...this.target.matrix };
-    rotMatrix.elements[12] = 0;
-    rotMatrix.elements[13] = 0;
-    rotMatrix.elements[14] = 0;
 
-    idealLookat.applyQuaternion(rotMatrix);
+    idealLookat.applyQuaternion(this.target.matrix);
 
     return idealLookat.add(this.target.position);
   }
@@ -44,12 +35,11 @@ export default class ThirdPersonShipCamera {
     this.camera.position.copy(idealOffset);
 
     this.camera.lookAt(idealLookat);
-    // TODO decouple hardcoded third person camera controls
-    // // {
-    let rotMatrix = { ...this.target.matrix };
-    rotMatrix.elements[12] = 0;
-    rotMatrix.elements[13] = 0;
-    rotMatrix.elements[14] = 0;
+    const newMatrix = new THREE.Matrix4();
+    newMatrix.copy(this.target.matrix);
+    newMatrix.elements[12] = 0;
+    newMatrix.elements[13] = 0;
+    newMatrix.elements[14] = 0;
 
     const cameraMatrix = new THREE.Matrix4()
       // place camera in center of player ship
@@ -61,7 +51,7 @@ export default class ThirdPersonShipCamera {
         )
       )
       // player rotation matrix
-      .multiply(rotMatrix)
+      .multiply(newMatrix)
       // angle camera down a little
       .multiply(new THREE.Matrix4().makeRotationX(-0.1))
       // pull camera behind player target

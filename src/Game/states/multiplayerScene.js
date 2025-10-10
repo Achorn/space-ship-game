@@ -193,20 +193,7 @@ class GameSceneMultiplayer extends GameState {
     this.clientShips[id] = newShip;
     if (this.socket.id === id) this.thirdPersonCamera.target = newShip;
     console.log("adding new ship!");
-
-    //self
-    // if (id === this.socket.id) {
-    // let newShip = this.playerShip;
-    // this.thirdPersonCamera.target = newShip;
-    // this.clientShips[id] = newShip;
-
-    //other player
-    // } else {
-    // let newShip = new PlayerShip("red");
-    // this.gameEntities.push(newShip);
-    // }
   }
-
   // TODO fix removing client. just do it with socketio
   removeNewClientShip(id) {
     console.log("removing client ship!");
