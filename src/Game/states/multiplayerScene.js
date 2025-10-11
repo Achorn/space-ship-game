@@ -56,7 +56,7 @@ class GameSceneMultiplayer extends GameState {
         // player doesnt exist yet
         if (!this.clientShips[id]) {
           console.log("player doesnt exist yet", id);
-          this.addNewClientShip(id);
+          this.addNewClientShip(id, backEndPlayer);
         } else {
           // update existing player
           this.updateClientShip(id, backEndPlayer);
@@ -182,10 +182,10 @@ class GameSceneMultiplayer extends GameState {
     this.world.sphereBoundary.instance.geometry.dispose();
     this.world.sphereBoundary.instance.material.dispose();
   }
-  addNewClientShip(id) {
+  addNewClientShip(id, backendPlayer) {
     let geometry = new THREE.BoxGeometry(0.4, 0.4, 0.4);
     let material = new THREE.MeshStandardMaterial({
-      color: this.socket.id == id ? "orange" : "red",
+      color: backendPlayer.color,
     });
     let mesh = new THREE.Mesh(geometry, material);
     let newShip = mesh;

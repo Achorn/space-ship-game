@@ -1,7 +1,7 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
 import * as THREE from "three";
-
+import { hsvToRgb } from "./src/utils/MathUtils.js";
 import app from "./app.js";
 import ShipController from "./src/server/controller/ShipController.js";
 
@@ -22,6 +22,8 @@ const backendShipInputs = {};
 io.on("connection", (socket) => {
   socket.on("newPlayer", (input) => {
     console.log("🥳 New client connected, id: " + socket.id);
+    const rgbColor = hsvToRgb(Math.random() * 360, 1, 1);
+    const threeColor = new THREE.Color(rgbColor.r, rgbColor.g, rgbColor.b);
 
     let x = 0;
     let y = 2;
@@ -30,6 +32,7 @@ io.on("connection", (socket) => {
     backEndPlayers[socket.id] = {
       position: { x, y, z },
       matrix: new THREE.Matrix4().makeBasis(x, y, z),
+      color: threeColor,
     };
     backEndShipControllers[socket.id] = new ShipController();
     backendShipInputs[socket.id] = input;
