@@ -12,8 +12,8 @@ export default class BasicCharacterControllerInput {
       rotateRight: false,
       down: false,
       up: false,
-      start: false,
       shoot: false,
+      start: false,
     };
   }
 

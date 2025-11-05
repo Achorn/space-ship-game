@@ -18,6 +18,9 @@ export default class ShipController {
 
     this.planeSpeed = 0.01;
     this.speedModifier = 0.03;
+
+    //guns variables
+    this.canShoot = 0;
   }
 
   get Position() {
@@ -30,8 +33,21 @@ export default class ShipController {
     return { position: this.position, matrix: this.matrix };
   }
 
-  update(ship, input) {
-    // return;
+  update(ship, input, deltaTime) {
+    if (input.shoot && this.canShoot <= 0) {
+      // if (input.shoot) {
+      this.canShoot = 200;
+      // Create bullet
+
+      let direction = new THREE.Vector3(
+        -1 * this.z.x,
+        -1 * this.z.y,
+        -1 * this.z.z
+      );
+      // let bulletEntity = new BulletServer(this.planePosition, direction);
+    }
+    this.canShoot -= deltaTime;
+
     // updates this.position
     this.updatePlaneAxis(this.x, this.y, this.z, this.planePosition, input);
     this.rotMatrix = new THREE.Matrix4().makeBasis(this.x, this.y, this.z);

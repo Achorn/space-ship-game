@@ -1,5 +1,10 @@
+// import Game from "./Game";
+// import AmmoLib from "ammo.js/builds/ammo";
+import Ammo from "ammo.js";
+
 class PhysicsEngine {
   constructor() {
+    // this.game = new Game();
 
     this.Ammo;
     this.tmpTrans;
@@ -12,8 +17,7 @@ class PhysicsEngine {
     this.init();
   }
 
-  init() {
-    //load ammojs and a bunch of shit
+  init = async () => {
     Ammo().then((lib) => {
       this.Ammo = lib;
       this.tmpTrans = new this.Ammo.btTransform();
@@ -22,24 +26,24 @@ class PhysicsEngine {
       this.setupPhysicsWorld();
       this.setupContactResultCallback();
     });
-  }
+  };
 
   setupPhysicsWorld() {
-    let collisionConfiguration = new Ammo.btDefaultCollisionConfiguration(),
-      dispatcher = new Ammo.btCollisionDispatcher(collisionConfiguration),
-      overlappingPairCache = new Ammo.btDbvtBroadphase(),
-      solver = new Ammo.btSequentialImpulseConstraintSolver();
+    let collisionConfiguration =
+        new this.Ammo.btDefaultCollisionConfiguration(),
+      dispatcher = new this.Ammo.btCollisionDispatcher(collisionConfiguration),
+      overlappingPairCache = new this.Ammo.btDbvtBroadphase(),
+      solver = new this.Ammo.btSequentialImpulseConstraintSolver();
     this.dispatcher = dispatcher;
-    this.physicsWorld = new Ammo.btDiscreteDynamicsWorld(
+    this.physicsWorld = new this.Ammo.btDiscreteDynamicsWorld(
       dispatcher,
       overlappingPairCache,
       solver,
       collisionConfiguration
     );
-    this.physicsWorld.setGravity(new Ammo.btVector3(0, 0, 0));
+    this.physicsWorld.setGravity(new this.Ammo.btVector3(0, 0, 0));
   }
 
-  //check if objects collide, and if the user data(threejs objectmesh) is a bullet
   setupContactResultCallback() {
     this.cbContactResult = new this.Ammo.ConcreteContactResultCallback();
     this.cbContactResult.addSingleResult = (
@@ -51,7 +55,7 @@ class PhysicsEngine {
       partId1,
       index1
     ) => {
-      let contactPoint = Ammo.wrapPointer(cp, this.Ammo.btManifoldPoint);
+      let contactPoint = this.Ammo.wrapPointer(cp, this.Ammo.btManifoldPoint);
 
       const distance = contactPoint.getDistance();
       // console.log(distance);
@@ -63,16 +67,16 @@ class PhysicsEngine {
       );
       let rb0 = this.Ammo.castObject(
         colWrapper0.getCollisionObject(),
-        Ammo.btRigidBody
+        this.Ammo.btRigidBody
       );
 
       let colWrapper1 = this.Ammo.wrapPointer(
         colObj1Wrap,
-        Ammo.btCollisionObjectWrapper
+        this.Ammo.btCollisionObjectWrapper
       );
       let rb1 = this.Ammo.castObject(
         colWrapper1.getCollisionObject(),
-        Ammo.btRigidBody
+        this.Ammo.btRigidBody
       );
 
       let threeObject0 = rb0.threeObject;
@@ -100,7 +104,6 @@ class PhysicsEngine {
     this.removeDisposedRigidBodies();
 
     this.physicsWorld.stepSimulation(deltaTime, 10);
-    
     for (let i = 0; i < this.rigidBodies.length; i++) {
       let objThree = this.rigidBodies[i];
       let objAmmo = objThree.userData.physicsBody;
@@ -123,7 +126,6 @@ class PhysicsEngine {
       }
     }
   }
-  // filtering out ridig bodies whos threejs meshes are to be disposed
   removeDisposedRigidBodies() {
     //for messing with disposed rigid bodies in the future
     // const toBeDisposed = this.rigidBodies.filter(

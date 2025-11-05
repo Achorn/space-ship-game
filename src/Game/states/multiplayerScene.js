@@ -9,8 +9,13 @@ import DialogState from "./dialog/DialogState";
 import Game from "../Game";
 import EndCredits from "./EndCredits";
 import { io } from "socket.io-client";
-// const URL = `http://localhost:3000`; // local;
-const URL = `https://${window.location.hostname}`; //prod
+
+const apiEnv = process.env.NODE_ENV;
+console.log(apiEnv);
+const URL =
+  apiEnv === "development"
+    ? `http://localhost:3000`
+    : `https://${window.location.hostname}`;
 
 // console.log(URL);
 import * as THREE from "three";
