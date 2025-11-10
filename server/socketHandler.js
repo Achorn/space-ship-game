@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
-import ShipController from "./src/server/controller/ShipController.js";
-import PhysicsEngine from "./src/server/world/PhysicsEngineServer.js";
-import { hsvToRgb } from "./src/utils/MathUtils.js";
+import ShipController from "../src/server/controller/ShipController.js";
+import PhysicsEngine from "../src/server/world/PhysicsEngineServer.js";
+import { hsvToRgb } from "../src/utils/MathUtils.js";
 import * as THREE from "three";
 
 // make a game server class to clean up server?
