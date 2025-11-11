@@ -11,9 +11,14 @@ const backEndShipControllers = {};
 const backendShipInputs = {};
 
 const phsyicsEngine = new PhysicsEngine();
+//add ships as physics objects that are moved by players (some time of object unaffected by physics world)
+// add balls as moving physics objects
+//add structures as objects
 
 const initSocketServer = (httpServer) => {
   const io = new Server(httpServer, {
+    pingInterval: 2000,
+    pingTimeout: 5000,
     cors: {
       origin: "*", // Adjust as needed for security
     },
@@ -55,8 +60,8 @@ const initSocketServer = (httpServer) => {
       socket.broadcast.emit("playerLeave", socket.id);
     });
 
-    socket.on("clientUpdateSelf", (input) => {
-      backendShipInputs[socket.id] = input;
+    socket.on("clientUpdateSelf", (frontEndInput) => {
+      backendShipInputs[socket.id] = frontEndInput;
       //   //update players using keydown event in the near future
     });
   });
@@ -76,6 +81,7 @@ const initSocketServer = (httpServer) => {
         deltaTime
       );
     }
+
     io.emit("updatePlayers", backEndPlayers);
     lastExecutionTime = currentTime; // Update for the next iteration
   }, 15);

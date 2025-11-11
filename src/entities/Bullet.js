@@ -46,6 +46,8 @@ class Bullet extends GameEntity {
       localInertia
     );
     let body = new Ammo.btRigidBody(rbInfo);
+
+    //threejs
     body.threeObject = this.mesh;
 
     // body.setFriction(3);

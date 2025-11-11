@@ -5,9 +5,6 @@ import BasicShipController from "../Utils/controllers/BasicShipController";
 import ThirdPersonShipCamera from "../Utils/cameras/ThirdPersonShipCamera";
 import PlayerShip from "../World/PlayerShip";
 import TargetLoader from "./gameScene/targetLoader";
-import DialogState from "./dialog/DialogState";
-import Game from "../Game";
-import EndCredits from "./EndCredits";
 import { io } from "socket.io-client";
 
 const apiEnv = process.env.NODE_ENV;
@@ -47,14 +44,7 @@ class GameSceneMultiplayer extends GameState {
       console.log("connected!");
       this.socket.emit("newPlayer", this.input.keys);
     });
-    this.socket.on("posUpdates", (players) => {
-      console.log(players);
-      for (let id in players) {
-        if (this.clientShips[id] !== undefined && id !== this.socket.id) {
-          this.updateClientShip(id, players);
-        }
-      }
-    });
+
     this.socket.on("updatePlayers", (backEndPlayers) => {
       for (const id in backEndPlayers) {
         const backEndPlayer = backEndPlayers[id];
@@ -75,7 +65,6 @@ class GameSceneMultiplayer extends GameState {
       }
     });
 
-    //backend
     this.gameEntities = [];
     this.world = new World(this);
     this.bulletSpeedFactor = 1.4;
@@ -219,67 +208,3 @@ class GameSceneMultiplayer extends GameState {
   }
 }
 export default GameSceneMultiplayer;
-
-class ScoreBoard {
-  constructor(totalScore) {
-    this.game = new Game();
-    this.total = totalScore;
-    this.points = 0;
-    this.isActive = true;
-  }
-
-  update() {
-    this.game.ammoPhysics.update(this.game.time.delta);
-    // update points
-    if (this.isActive) this.checkScore();
-  }
-  checkScore() {
-    if (this.points == this.total) {
-      this.isActive = false;
-
-      this.finishGame();
-    }
-  }
-  addPoint() {
-    this.points++;
-  }
-  draw(context) {
-    let display = this.points + "/" + this.total;
-    let x = this.game.canvas2d.width - 60;
-    context.fillStyle = "white";
-    context.font = "48px serif";
-    context.textAlign = "end";
-    context.textBaseline = "top";
-    context.fillText(display, x, 50);
-
-    // draw points to 2d array
-    // 0 / 10;
-    // maybe add some ui padding for game.
-  }
-
-  finishGame() {
-    setTimeout(() => {
-      new DialogState({
-        script: [
-          " Wow thanks for doing that!",
-          "This isn't the first time this has happened either...",
-          "Some company moved in this system recently and they've been dumping their trash here ever since!",
-          "It's becoming a problem...",
-          "The double edged sword with space being a new area to explore is there are no regulations and you can get away with pretty much anything out here.",
-          "Bigger corporations love it. ",
-          "Anyway, just park your ship and come in for some tea. ",
-        ],
-        dialogFinishedAction: () => {
-          this.game.transitionController.transition({
-            fadeoutTime: 2,
-            fadeInTime: 5,
-            midAction: () => {
-              let endCredits = new EndCredits();
-              this.game.stateStack.push(endCredits);
-            },
-          });
-        },
-      }).enterState();
-    }, 2000);
-  }
-}
